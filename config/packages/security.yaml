@@ -15,7 +15,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            entry_point: App\Security\LoginAuthenticator
+            # entry_point: App\Security\LoginAuthenticator
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\LoginAuthenticator
