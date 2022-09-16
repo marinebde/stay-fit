@@ -36,6 +36,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_connexion = null;
 
+    #[ORM\ManyToOne(inversedBy: 'users', targetEntity: Partenaire::class)]
+    private ?Partenaire $partenaires = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users', targetEntity: Structure::class)]
+    private ?Structure $structures = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -152,5 +159,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this-> id;
+    }
+
+    public function getPartenaires(): ?Partenaire
+    {
+        return $this->partenaires;
+    }
+
+    public function setPartenaires(?Partenaire $partenaires): self
+    {
+        $this->partenaires = $partenaires;
+
+        return $this;
+    }
+
+    public function getStructures(): ?Structure
+    {
+        return $this->structures;
+    }
+
+    public function setStructures(?Structure $structures): self
+    {
+        $this->structures = $structures;
+
+        return $this;
     }
 }

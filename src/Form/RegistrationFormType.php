@@ -2,7 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Partenaire;
+use App\Entity\Structure;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -45,7 +48,15 @@ class RegistrationFormType extends AbstractType
                     'Partenaire' => 'ROLE_PARTENAIRE',
                     'Structure' => 'ROLE_STRUCTURE'
                 ]
-                ]);
+                ])
+            ->add('partenaires', EntityType::class, [
+                'class' => Partenaire::class,
+                'choice_label' => 'nom',
+            ])
+            ->add('structures', EntityType::class, [
+                'class' => Structure::class,
+                'choice_label' => 'nom',
+            ]);
 
                 $builder
                     ->get('roles')

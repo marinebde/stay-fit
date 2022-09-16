@@ -16,20 +16,20 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-bg mb-5">
-            <a style="margin-left: 75px; color: #2c4d90;" class="navbar-brand space-brand" href="{{ path('app_login') }}">Stay Fit</a>
+            <a style="margin-left: 75px; color: #2c4d90;" class="navbar-brand space-brand" href="{{ path('app_home') }}">Stay Fit</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav mr-auto">
                      <li class="nav-item">
-                       <a style="color: black;" class="nav-link" href="#">Utilisateurs</a>
+                       <a style="color: black;" class="nav-link" href="{{ path('app_user_index') }}">Utilisateurs</a>
                      </li>
                      <li class="nav-item">
                        <a style="color: black;" class="nav-link" href="{{ path('app_partenaire_index') }}">Partenaires</a>
                      </li>
                      <li class="nav-item">
-                       <a style="color: black;" class="nav-link" href="#">Structures</a>
+                       <a style="color: black;" class="nav-link" href="{{ path('app_structure_index') }}">Structures</a>
                      </li>
                      <li class="nav-item">
                        <a style="color: black;" class="nav-link" href="{{ path('app_modules_index') }}">Modules</a>

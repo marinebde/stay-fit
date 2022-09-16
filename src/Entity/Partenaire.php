@@ -19,14 +19,18 @@ class Partenaire
     private ?string $nom = null;
 
     #[ORM\Column]
-    private ?bool $statut = null;
+    private ?bool $statut = true;
 
     #[ORM\ManyToMany(targetEntity: Modules::class, inversedBy: 'partenaires')]
     private Collection $modules;
 
+    #[ORM\OneToMany(mappedBy: 'partenaires', targetEntity: User::class)]
+    private Collection $users;
+
     public function __construct()
     {
         $this->modules = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,5 +89,35 @@ class Partenaire
     public function __toString()
     {
         return $this-> modules;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setPartenaires($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getPartenaires() === $this) {
+                $user->setPartenaires(null);
+            }
+        }
+
+        return $this;
     }
 }

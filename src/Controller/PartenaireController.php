@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Modules;
 use App\Entity\Partenaire;
 use App\Form\PartenaireType;
 use App\Repository\PartenaireRepository;
@@ -10,18 +9,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 #[Route('/partenaire')]
 class PartenaireController extends AbstractController
-{
+{   
+/**
+* @IsGranted("ROLE_PARTENAIRE")
+*/
     #[Route('/', name: 'app_partenaire_index', methods: ['GET'])]
     public function index(PartenaireRepository $partenaireRepository): Response
     {
-        return $this->render('partenaire/index.html.twig', [
-            'partenaires' => $partenaireRepository->findAll(),
-        ]);
+            return $this->render('partenaire/index.html.twig', [
+                'partenaires' => $partenaireRepository->findAll(),
+            ]);
     }
 
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
     #[Route('/new', name: 'app_partenaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request, PartenaireRepository $partenaireRepository): Response
     {
@@ -43,6 +50,9 @@ class PartenaireController extends AbstractController
         ]);
     }
 
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
     #[Route('/{id}', name: 'app_partenaire_show', methods: ['GET'])]
     public function show(Partenaire $partenaire): Response
     {
@@ -51,6 +61,9 @@ class PartenaireController extends AbstractController
         ]);
     }
 
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
     #[Route('/{id}/edit', name: 'app_partenaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Partenaire $partenaire, PartenaireRepository $partenaireRepository): Response
     {
@@ -69,6 +82,9 @@ class PartenaireController extends AbstractController
         ]);
     }
 
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
     #[Route('/{id}', name: 'app_partenaire_delete', methods: ['POST'])]
     public function delete(Request $request, Partenaire $partenaire, PartenaireRepository $partenaireRepository): Response
     {
