@@ -2,8 +2,9 @@
 
 namespace App\Security;
 
-use App\Repository\UserRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use DateTime;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,8 +29,10 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     return 'app_login' === $request->attributes->get('_route') && $request->isMethod('POST');
     }
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, Security $security, EntityManagerInterface $entityManager)
     {
+        $this->security = $security;
+        $this->entityManager = $entityManager;
     }
 
     public function authenticate(Request $request): Passport
@@ -52,7 +55,16 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        
+            $entityManager = $this->entityManager;
+            $user = $this->entityManager->getRepository(User::class);
+
+            $user = $this->security->getUser();
+            $user->setDateConnexion(new DateTime());
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+            
+
             return new RedirectResponse($this->urlGenerator->generate('app_home'));
 
     }

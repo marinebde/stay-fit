@@ -21,8 +21,8 @@
             </tr>
             <tr>
                 <th>Modules par défaut</th>
-                {% for modules in partenaire.modules %}
-                <td>{{ modules.nom }}</td>
+                {% for partenairesModules in partenaire.partenairesModules %}
+                <td>{{ partenairesModules.modules.nom }}</td>
                 {% endfor %}
             </tr>
         </tbody>

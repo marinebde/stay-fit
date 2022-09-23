@@ -36,6 +36,10 @@ class Structure
     #[ORM\OneToMany(mappedBy: 'structures', targetEntity: User::class)]
     private Collection $users;
 
+    #[ORM\ManyToOne(inversedBy: 'structures')]
+    private ?Partenaire $partenaire = null;
+
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -147,4 +151,22 @@ class Structure
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this-> nom;
+    }
+
+    public function getPartenaire(): ?Partenaire
+    {
+        return $this->partenaire;
+    }
+
+    public function setPartenaire(?Partenaire $partenaire): self
+    {
+        $this->partenaire = $partenaire;
+
+        return $this;
+    }
+
 }

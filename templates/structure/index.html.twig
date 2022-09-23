@@ -3,7 +3,9 @@
 {% block title %}Structure index{% endblock %}
 
 {% block body %}
-    <h1>Structure index</h1>
+{% if  is_granted('ROLE_ADMIN') %}
+
+    <h1>Liste des structures</h1>
 
     <table class="table">
         <thead>
@@ -26,7 +28,7 @@
                 <td>{{ structure.adresse }}</td>
                 <td>{{ structure.codePostal }}</td>
                 <td>{{ structure.ville }}</td>
-                <td>{{ structure.statut ? 'Yes' : 'No' }}</td>
+                <td>{{ structure.statut ? 'Actif' : 'Inactif' }}</td>
                 <td>{{ structure.nomGerant }}</td>
                 <td>
                     <a href="{{ path('app_structure_show', {'id': structure.id}) }}">show</a>
@@ -42,4 +44,59 @@
     </table>
 
     <a href="{{ path('app_structure_new') }}">Create new</a>
+
+    {% elseif is_granted('ROLE_STRUCTURE') %}
+
+        <div>Structure {{ app.user.structures.nom }}</div>
+        <div>Statut: {{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</div>
+
+        <div>Adresse: {{ app.user.structures.adresse }}</div>
+        <div>Code Postal: {{ app.user.structures.codePostal }}</div>
+        <div>Ville: {{ app.user.structures.ville }}</div>
+        <div>Gérant: {{ app.user.structures.nomGerant }}</div>
+
+        <h2>Modules par défaut</h2>
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for modules in app.user.structures.partenaire.modules %}
+            {% if modules.statut == true %}
+                <tr>
+                <td>{{ modules.id }}</td>
+                <td>{{ modules.nom }}</td>
+                <td>{{ modules.statut ? 'Actif' : 'Inactif' }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+        </table>
+
+        <h2>Liste des modules</h1>
+         <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+
+                {% for modules in app.user.structures.modules %}
+                <tr>
+                <td>{{ modules.id }}</td>
+                <td>{{ modules.nom }}</td>
+                <td>{{ modules.statut ? 'Actif' : 'Inactif' }}</td>
+                </tr>
+                {% endfor %}
+        </tbody>
+        </table>
+
+    {% endif %}
 {% endblock %}

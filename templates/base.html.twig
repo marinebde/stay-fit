@@ -5,6 +5,7 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -32,7 +33,7 @@
                        <a style="color: black;" class="nav-link" href="{{ path('app_structure_index') }}">Structures</a>
                      </li>
                      <li class="nav-item">
-                       <a style="color: black;" class="nav-link" href="{{ path('app_modules_index') }}">Modules</a>
+                       <a style="color: black;" class="nav-link" href="{{ path('app_module_index') }}">Modules</a>
                      </li>
                    </ul>
                 <form class="form-inline my-2 my-lg-0">

@@ -3,11 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Partenaire;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Entity\Modules;
+use App\Entity\Module;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+
 
 class PartenaireType extends AbstractType
 {
@@ -16,13 +20,21 @@ class PartenaireType extends AbstractType
         $builder
             ->add('nom')
             ->add('statut')
-            ->add('modules', EntityType::class, [
-                'class' => Modules::class,
-                'choice_label' => 'nom',
-                'expanded' => true,
-                'multiple' => true,
-            ])
-        ;
+           //->add('partenaireModules', CollectionType::class, [
+           //    'entry_type' => PartenaireModuleType::class,
+           //    'by_reference' => false,
+           //    'allow_add' => false,
+           //    'allow_delete' => false,
+           //])
+           //->add('modules', EntityType::class, [
+           //    'class' => Module::class,
+           //    'choice_label' => 'nom',
+           //    'label' => 'Modules par défaut',
+           //    'expanded' => true,
+           //    'multiple' => true,
+           //    'mapped' => false,
+           // ])
+             ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

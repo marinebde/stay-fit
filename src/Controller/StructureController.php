@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Structure;
 use App\Form\StructureType;
+use App\Repository\PartenaireRepository;
 use App\Repository\StructureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

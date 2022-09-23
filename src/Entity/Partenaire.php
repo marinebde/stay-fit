@@ -21,16 +21,20 @@ class Partenaire
     #[ORM\Column]
     private ?bool $statut = true;
 
-    #[ORM\ManyToMany(targetEntity: Modules::class, inversedBy: 'partenaires')]
-    private Collection $modules;
-
     #[ORM\OneToMany(mappedBy: 'partenaires', targetEntity: User::class)]
     private Collection $users;
 
+    #[ORM\OneToMany(mappedBy: 'partenaire', targetEntity: Structure::class)]
+    private Collection $structures;
+
+    #[ORM\OneToMany(mappedBy: 'Partenaires', targetEntity: PartenaireModule::class)]
+    private Collection $partenaireModules;
+
     public function __construct()
     {
-        $this->modules = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->structures = new ArrayCollection();
+        $this->partenaireModules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,33 +66,10 @@ class Partenaire
         return $this;
     }
 
-    /**
-     * @return Collection<int, Modules>
-     */
-    public function getModules(): Collection
-    {
-        return $this->modules;
-    }
-
-    public function addModule(Modules $module): self
-    {
-        if (!$this->modules->contains($module)) {
-            $this->modules->add($module);
-        }
-
-        return $this;
-    }
-
-    public function removeModule(Modules $module): self
-    {
-        $this->modules->removeElement($module);
-
-        return $this;
-    }
 
     public function __toString()
     {
-        return $this-> modules;
+        return $this-> nom;
     }
 
     /**
@@ -115,6 +96,66 @@ class Partenaire
             // set the owning side to null (unless already changed)
             if ($user->getPartenaires() === $this) {
                 $user->setPartenaires(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Structure>
+     */
+    public function getStructures(): Collection
+    {
+        return $this->structures;
+    }
+
+    public function addStructure(Structure $structure): self
+    {
+        if (!$this->structures->contains($structure)) {
+            $this->structures->add($structure);
+            $structure->setPartenaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStructure(Structure $structure): self
+    {
+        if ($this->structures->removeElement($structure)) {
+            // set the owning side to null (unless already changed)
+            if ($structure->getPartenaire() === $this) {
+                $structure->setPartenaire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PartenaireModule>
+     */
+    public function getPartenaireModules(): Collection
+    {
+        return $this->partenaireModules;
+    }
+
+    public function addPartenaireModule(PartenaireModule $partenaireModule): self
+    {
+        if (!$this->partenaireModules->contains($partenaireModule)) {
+            $this->partenaireModules->add($partenaireModule);
+            $partenaireModule->setPartenaires($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartenaireModule(PartenaireModule $partenaireModule): self
+    {
+        if ($this->partenaireModules->removeElement($partenaireModule)) {
+            // set the owning side to null (unless already changed)
+            if ($partenaireModule->getPartenaires() === $this) {
+                $partenaireModule->setPartenaires(null);
             }
         }
 

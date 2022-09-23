@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ partenaire.id }}</td>
                 <td>{{ partenaire.nom }}</td>
-                <td>{{ partenaire.statut ? 'Yes' : 'No' }}</td>
+                <td>{{ partenaire.statut ? 'Actif' : 'Inactif' }}</td>
                 
                 <td>
                     <a href="{{ path('app_partenaire_show', {'id': partenaire.id}) }}">show</a>
@@ -53,6 +53,16 @@
                 <th>Action</th>
             </tr>
         </thead>
+        <tbody>
+
+                {% for structures in app.user.partenaires.structures %}
+                <tr>
+                <td>{{ structures.id }}</td>
+                <td>{{ structures.nom }}</td>
+                <td>{{ structures.statut ? 'Actif' : 'Inactif' }}</td>
+                </tr>
+                {% endfor %}
+        </tbody>
         </table>
 
         <h2>Modules par défaut</h2>  
@@ -70,7 +80,6 @@
                 <tr>
                 <td>{{ modules.id }}</td>
                 <td>{{ modules.nom }}</td>
-                <td>{{ modules.statut ? 'Actif' : 'Inactif' }}</td>
                 </tr>
                 {% endfor %}
         </tbody>

@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Modules;
+use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Modules>
+ * @extends ServiceEntityRepository<Module>
  *
- * @method Modules|null find($id, $lockMode = null, $lockVersion = null)
- * @method Modules|null findOneBy(array $criteria, array $orderBy = null)
- * @method Modules[]    findAll()
- * @method Modules[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Module|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Module|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Module[]    findAll()
+ * @method Module[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ModulesRepository extends ServiceEntityRepository
+class ModuleRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Modules::class);
+        parent::__construct($registry, Module::class);
     }
 
-    public function add(Modules $entity, bool $flush = false): void
+    public function add(Module $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class ModulesRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Modules $entity, bool $flush = false): void
+    public function remove(Module $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class ModulesRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Modules[] Returns an array of Modules objects
+//     * @return Module[] Returns an array of Module objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class ModulesRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Modules
+//    public function findOneBySomeField($value): ?Module
 //    {
 //        return $this->createQueryBuilder('m')
 //            ->andWhere('m.exampleField = :val')

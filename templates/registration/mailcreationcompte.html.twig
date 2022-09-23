@@ -1,0 +1,12 @@
+
+<h1>Bonjour : {{ user.prenom|capitalize }}</h1>
+
+<div>Votre compte vient d'être crée sur la plateforme de Stayfit.
+</br>
+Celui-ci vous permettra de visualiser vos infrastructures.</div>
+
+<div>Pour finaliser la création du compte, veuillez cliquer sur le lien ci-dessous:
+</br>
+<a href="{{ url('app_user_confirmer_compte', {"token" : token}) }}">Cliquer ici pour confirmer votre compte</a>
+
+</div>
