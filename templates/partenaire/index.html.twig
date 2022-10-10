@@ -2,91 +2,200 @@
 
 {% block title %}Partenaire{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
 
 {% if  is_granted('ROLE_ADMIN') %}
-    <h1>Partenaire(s)</h1>
 
-    <table class="table">
-        <thead>
+    <h1 class="text-center mb-5 titre-partenaire-index">Liste des partenaires</h1>
+
+    <div class="text-center mb-5">
+        <a class="btn-center btn-new-partenaire" href="{{ path('app_partenaire_new') }}">Nouveau Partenaire</a>
+    </div>
+
+    <div class="text-center pt-3">
+    <table id="formCheck" class="table table-hover container">
+        <thead class="thead-light thead-index-partenaire">
             <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Statut</th>
-                <th>actions</th>
+                <th class="th-index-partenaire">ID</th>
+                <th class="th-index-partenaire">NOM</th>
+                <th class="th-index-partenaire">STATUT</th>
+                <th class="th-index-partenaire">ACTIONS</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="tr-index-partenaire">
         {% for partenaire in partenaires %}
+
             <tr>
                 <td>{{ partenaire.id }}</td>
                 <td>{{ partenaire.nom }}</td>
-                <td>{{ partenaire.statut ? 'Actif' : 'Inactif' }}</td>
-                
                 <td>
-                    <a href="{{ path('app_partenaire_show', {'id': partenaire.id}) }}">show</a>
-                    <a href="{{ path('app_partenaire_edit', {'id': partenaire.id}) }}">edit</a>
+            <div class="form-check form-switch form-switch-statut-partenaire">
+            <input 
+            class="form-check-input"
+            type="checkbox"
+            id="{{ partenaire.id }}"
+            name="{{ partenaire.nom }}"
+            value="{{ partenaire.id }}"
+            data-path = "{{ path('app_partenaire_edit_statut', {id: partenaire.id }) }}"
+            {{ partenaire.statut ? "checked" : "" }}
+            data-toggle="modal"
+            data-target="#exampleModal"
+    >
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modification statut</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir modifier le statut?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+        <button type="button" class="btn btn-primary">Oui</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+    </td>
+
+                
+                <td class="td-actions-index-partenaire">
+            
+                    <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_partenaire_show', {'id': partenaire.id}) }}"></a>
+                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_partenaire_edit', {'id': partenaire.id}) }}"></a>
                 </td>
                 
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4">pas de résultat trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <a href="{{ path('app_partenaire_new') }}">Create new</a>
+    </div>
     
     {% elseif is_granted('ROLE_PARTENAIRE') %}
 
-        <div>Partenaire {{ app.user.partenaires.nom }}</div>
-        <div>Statut: {{ app.user.partenaires.statut ? 'Actif' : 'Inactif' }}</div>
+        <div class="text-center mb-5">
+        <h1 class="titre-partenaire-index">Partenaire {{ app.user.partenaires.nom }}</h1>
 
-        <h2>Structures</h2>
-        <table class="table">
-        <thead>
+        {% if (app.user.partenaires.statut == true) %}
+        <span class="statut-partenaire-index statut-actif">{{ app.user.partenaires.statut ? 'Actif' : 'Inactif' }}</span>
+        {% elseif (app.user.partenaires.statut == false) %}
+        <span class="statut-partenaire-index statut-inactif">{{ app.user.partenaires.statut ? 'Actif' : 'Inactif' }}</span>
+        {% endif %}
+
+        </div>
+
+        <div class="text-center">
+        <h2 class="titre-partenaire-index-h2">Liste des structures</h2>
+        <table class="table table hover container">
+        <thead class="thead-light thead-index-partenaire">
             <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Statut</th>
-                <th>Action</th>
+                <th class="th-index-partenaire">ID</th>
+                <th class="th-index-partenaire">NOM</th>
+                <th class="th-index-partenaire">STATUT</th>
+                <th class="th-index-partenaire">ACTION</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="tr-index-partenaire">
 
                 {% for structures in app.user.partenaires.structures %}
                 <tr>
                 <td>{{ structures.id }}</td>
                 <td>{{ structures.nom }}</td>
                 <td>{{ structures.statut ? 'Actif' : 'Inactif' }}</td>
+                <td class="td-actions-index-partenaire">
+
+                <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structures.id}) }}"></a>
+                </td>
                 </tr>
                 {% endfor %}
         </tbody>
         </table>
+        </div>
 
-        <h2>Modules par défaut</h2>  
-        <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Statut</th>
-            </tr>
-        </thead>
-        <tbody>
+    <h2 class="titre-partenaire-index-h2 mt-5 text-center">Modules par défaut</h2>
 
-                {% for modules in app.user.partenaires.modules %}
-                <tr>
-                <td>{{ modules.id }}</td>
-                <td>{{ modules.nom }}</td>
-                </tr>
-                {% endfor %}
-        </tbody>
-        </table>
+    <ul class="container modules-defaut-index-partenaire">
+    {% for module in app.user.partenaires.modules %}
+        <li class="modules-defaut-index-partenaire-liste">{{ module.nom }}</li>
+    {% endfor %}
+    </ul>
+  
+    
 
     {% endif %}
 
 
+<script>
 
+$('#formCheck').on("change","input[type=checkbox]", function(){
+ 
+    const modal = document.getElementById('exampleModal')
+    const footer = modal.getElementsByClassName('modal-footer')[0].children[1]
+    
+    footer.addEventListener('click', (event)=> {
+    event.preventDefault();
+    const url = $(this).data('path')
+            
+        if($(this).is(':checked')){
+
+        var val = true;
+
+        $.ajax({
+            type:     'POST',
+            url:       url,  
+            data:  { statut : val },
+            success: function(reponse){
+               // $('#magasinDatas').html(data);
+               console.log(reponse);
+            }
+        })
+        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                        location.reload();
+                    
+                                      
+        } else {
+
+        val = false;
+
+        $.ajax({
+            type:     'POST',
+            url:       url,  
+            data: { statut : val },
+            success: function(reponse){
+               // $('#magasinDatas').html(data);
+               console.log(reponse);
+            }
+        })
+        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                        location.reload();
+                   
+                                 
+    }
+    })
+});
+            
+</script>
 {% endblock %}

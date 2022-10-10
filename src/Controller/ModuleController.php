@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Require ROLE_ADMIN for all the actions of this controller
@@ -19,6 +21,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 #[Route('/module')]
 class ModuleController extends AbstractController
 {
+
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('/', name: 'app_module_index', methods: ['GET'])]
     public function index(ModuleRepository $moduleRepository): Response
     {
@@ -71,6 +79,23 @@ class ModuleController extends AbstractController
             'form' => $form,
         ]);
     }
+
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
+#[Route('/{id}/edit-statut', name: 'app_module_edit_statut', methods: ['GET','POST'])]
+public function editModule(Request $request, Module $module,): Response
+{   
+    $statut = $request->request->get('statut');
+    // transforme la chaine de caractère en boolean
+    $booleanStatut = filter_var($statut, FILTER_VALIDATE_BOOLEAN);
+
+    $module->setStatut($booleanStatut);
+
+    $this->entityManager->persist($module);
+    $this->entityManager->flush();
+    return new JsonResponse();
+}
 
     #[Route('/{id}', name: 'app_module_delete', methods: ['POST'])]
     public function delete(Request $request, Module $module, ModuleRepository $moduleRepository): Response

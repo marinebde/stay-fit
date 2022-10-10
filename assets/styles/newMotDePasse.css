@@ -1,0 +1,78 @@
+.titre-new-mot-de-passe {
+    color: #0C1120;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    font-family: Pt, serif;
+    font-size: 32px;
+    letter-spacing: 0.1px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-new-motdepasse {
+    width: 100%;
+    max-width: 50%;
+    height: auto;
+    padding: 30px;
+    margin: auto;
+    margin-bottom: 10em;
+    background-color: #dfe0e0;
+    border-radius: 30px;
+    font-size: 16px;
+}
+
+.form-new-motdepasse input {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-bottom: 30px;
+    margin-top: 10px;
+   
+}
+
+.form-container-new-motdepasse {
+    display: grid;
+    justify-content: center;
+    justify-items: start;
+}
+
+.form-container-new-motdepasse label {
+    font-family: 'palanquin', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-right: 0.8em;
+}
+
+.form-container-new-motdepasse input {
+    display: grid;
+    width: 30em;
+}
+
+.container-btn-save-motdepasse {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-save-motdepasse {
+    width: 10em;
+    color: #0C1120;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 30px;
+    background: 
+        linear-gradient(90deg, #2C4D90 0%, 
+        rgba(229, 229, 229, 0.74) 72.33%);
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 600;
+    border: 1px solid #0C1120;
+
+}
+
+.btn-save-motdepasse:hover {
+    color: #0C1120;
+    background: 
+        linear-gradient(90deg, 
+        rgba(229, 229, 229, 0.74) 0%, rgba(44, 77, 144, 0.75) 96.45%);
+}

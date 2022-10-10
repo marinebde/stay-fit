@@ -1,37 +1,34 @@
-        {{ form_start(registrationForm) }}
 
+{{ form_start(registrationForm, {'attr' : {'class' : 'form-save-utilisateur'}}) }}
+
+    <div class="form-container-row-utilisateur-save">
         {{ form_row(registrationForm.nom) }}
         {{ form_row(registrationForm.prenom) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
+            label: 'Mot de passe'
         }) }}
+        </div>
+
+        <div class="form-container-row-utilisateur-save-statut text-center">
+        {{ form_row(registrationForm.statut) }}
+        </div>
+
+
+        <div class="form-container-row-utilisateur-save-autres">
         {{ form_row(registrationForm.roles) }}
         {{ form_row(registrationForm.partenaires) }}
+        {{ form_row(registrationForm.structures) }}
+        </div>
         
+    <div class="container-btn-save-utilisateur">
+        <button type="submit" class="btn btn-save-utilisateur">Enregistrer</button>
+    </div>
 
-
-        <button type="submit" class="btn">Register</button>
         
-    {{ form_end(registrationForm) }}
+     {{ form_end(registrationForm) }}
 
 {% block javascripts %}
-<script>
-$(document).on('change', '#registration_form_roles', function () {
-let $field = $(this)
-let $rolesField = $('#registration_form_roles')
-let $form = $field.closest('form')
-let target = '#' + $field.attr('id').replace('roles', 'partenaires')
 
-let data = {}
-data[$rolesField.attr('name')] = $rolesField.val()
-data[$field.attr('name')] = $field.val()
-
-$.post($form.attr('action'), data).then(function (data) {
-    let $input = $(data).find(target)
-    $(target).replaceWith($input)
-})
-})
-</script>
 {% endblock %}
 

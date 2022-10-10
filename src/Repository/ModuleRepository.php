@@ -39,21 +39,34 @@ class ModuleRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Module[] Returns an array of Module objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Module[] Returns an array of Module objects
+     */
+    public function findByPartenaire($partenaireId): array
+    {
+        return $this->createQueryBuilder('m')
+            ->join('m.partenaires', 'p', 'WITH', 'p = :p')
+            ->setParameter('p', $partenaireId)
+            ->orderBy('m.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
+     /**
+     * @return Module[] Returns an array of Module objects
+     */
+    public function findByStructure($structureId): array
+    {
+        return $this->createQueryBuilder('m')
+            ->join('m.structures', 's', 'WITH', 's = :s')
+            ->setParameter('s', $structureId)
+            ->orderBy('m.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+//
 //    public function findOneBySomeField($value): ?Module
 //    {
 //        return $this->createQueryBuilder('m')

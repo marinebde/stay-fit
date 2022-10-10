@@ -2,12 +2,18 @@
 
 {% block title %}Edit Partenaire{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-    <h1>Edit Partenaire</h1>
+<div class="body-partenaire-edit">
+    <a class="btn-retour-edit-partenaire" href="{{ path('app_partenaire_index') }}">Retour</a>
 
-    {{ include('partenaire/_form.html.twig', {'button_label': 'Update'}) }}
+    <h1 class="titre-partenaire-edit text-center">Modifier Partenaire</h1>
 
-    <a href="{{ path('app_partenaire_index') }}">back to list</a>
+    {{ include('partenaire/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-    {{ include('partenaire/_delete_form.html.twig') }}
+</div>
+
 {% endblock %}

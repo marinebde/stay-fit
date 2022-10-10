@@ -16,21 +16,19 @@ use App\Repository\UserRepository;
 use App\Service\Mailer;
 use DateTime;
 use Exception;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-/**
- * Require ROLE_ADMIN for all the actions of this controller
- *
- * @IsGranted("ROLE_ADMIN")
- */
 
 class RegistrationController extends AbstractController
 {
 
-    public function __construct(UserRepository $userRepository)
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $this->userRepository = $userRepository;
+        $this->entityManager = $entityManager;
     }
 
     #[Route('/register', name: 'app_register')]
@@ -51,6 +49,7 @@ class RegistrationController extends AbstractController
             );
 
             $user->setToken($this->generateToken());
+            $user->setStatut(false);
 
 
             $entityManager->persist($user);
@@ -104,7 +103,9 @@ class RegistrationController extends AbstractController
 
     }
 
-
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
     #[Route('/user', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
@@ -121,13 +122,23 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request $request, User $user, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
             $userRepository->add($user, true);
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
@@ -139,6 +150,27 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
+#[Route('/{id}/edit-statut', name: 'app_user_edit_statut', methods: ['GET','POST'])]
+public function editStatut(Request $request, User $user): Response
+{   
+        $statut = $request->request->get('statut');
+        // transforme la chaine de caractère en boolean
+        $booleanStatut = filter_var($statut, FILTER_VALIDATE_BOOLEAN);
+
+        $user->setStatut($booleanStatut);
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+        return new JsonResponse();
+}
+
+
+/**
+* @IsGranted("ROLE_ADMIN")
+*/
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {

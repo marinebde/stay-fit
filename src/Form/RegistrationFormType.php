@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Partenaire;
 use App\Entity\User;
+use App\Entity\Structure;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -34,6 +35,7 @@ class RegistrationFormType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('email')
+            ->add('statut')
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -41,11 +43,11 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Entrez votre mot de passe',
                     ]),
                     new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'min' => 8,
+                        'minMessage' => 'Votre mot de passe doit comporté au minimum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
@@ -61,47 +63,59 @@ class RegistrationFormType extends AbstractType
                     'Partenaire' => 'ROLE_PARTENAIRE',
                     'Structure' => 'ROLE_STRUCTURE',
                 ]
+                ])
+            ->add('partenaires', EntityType::class, [
+                        'class' => Partenaire::class,
+                        'choice_label' => 'nom',
+                        'placeholder' =>'',
+                        'required' => false,
+                ])
+            ->add('structures', EntityType::class, [
+                        'class' => Structure::class,
+                        'choice_label' => 'nom',
+                        'placeholder' =>'',
+                        'required' => false,
                 ]);
 
 
 
-        $builder->get('roles')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) {
-                // It's important here to fetch $event->getForm()->getData(), as
-                // $event->getData() will get you the client data (that is, the ID)
-                $form = $event->getForm();
+       // $builder->get('roles')->addEventListener(
+       //     FormEvents::POST_SUBMIT,
+       //     function (FormEvent $event) {
+       //         // It's important here to fetch $event->getForm()->getData(), as
+       //         // $event->getData() will get you the client data (that is, the ID)
+       //         $form = $event->getForm();
+//
+       //         $user = $this->security->getUser();
+       //         if ($user->getRoles('ROLE_PARTENAIRE')) {
+       //             $this->addPartenaire($form->getParent(), $form->getData());
+       //         }
+//
+       //         // since we've added the listener to the child, we'll have to pass on
+       //         // the parent to the callback function!
+       //     }
+       // );
 
-                $user = $this->security->getUser();
-                if ($user->getRoles('ROLE_PARTENAIRE')) {
-                    $this->addPartenaire($form->getParent(), $form->getData());
-                }
-
-                // since we've added the listener to the child, we'll have to pass on
-                // the parent to the callback function!
-            }
-        );
-
-        $builder->addEventListener(
-            FormEvents::POST_SET_DATA,
-            function (FormEvent $event) {
-              $data = $event->getData();
-              /* @var $ville Ville */
-              $user = $data->getRoles();
-              $form = $event->getForm();
-              if ($user) {
-                // On récupère le département et la région
-                $user= $user->getRoles();
-                // On crée les 2 champs supplémentaires
-                $this->addPartenaire($form, $user);
-                // On set les données
-                $form->get('roles')->setData($user);
-              } else {
-                // On crée les 2 champs en les laissant vide (champs utilisé pour le JavaScript)
-                $this->addPartenaire($form, null);
-              }
-            }
-          );
+       //$builder->addEventListener(
+         //  FormEvents::POST_SET_DATA,
+         //  function (FormEvent $event) {
+         //    $data = $event->getData();
+         //    /* @var $ville Ville */
+         //    $user = $data->getRoles();
+         //    $form = $event->getForm();
+         //    if ($user) {
+         //      // On récupère le département et la région
+         //      $user= $user->getRoles();
+         //      // On crée les 2 champs supplémentaires
+         //      $this->addPartenaire($form, $user);
+         //      // On set les données
+         //      $form->get('roles')->setData($user);
+         //    } else {
+         //      // On crée les 2 champs en les laissant vide (champs utilisé pour le JavaScript)
+         //      $this->addPartenaire($form, null);
+         //    }
+         //  }
+        //  );
 
 
 
@@ -128,29 +142,29 @@ class RegistrationFormType extends AbstractType
                 ));
     }
 
-private function addPartenaire(FormInterface $form)
-{
-  $builder = $form->getConfig()->getFormFactory()->createNamedBuilder(
-    'partenaires',
-    EntityType::class,
-    null,
-    [
-        'class' => Partenaire::class,
-        'choice_label' => 'nom',
-        'placeholder' => '',
-        'mapped' => true,
-        'required' => false,
-        'auto_initialize' => false,
-    ]
-    );
-    $builder->addEventListener(
-        FormEvents::POST_SUBMIT,
-        function (FormEvent $event) {
-          $form = $event->getForm();
-        }
-      );
-      $form->add($builder->getForm());
-    }
+//ivate function addPartenaire(FormInterface $form)
+//
+//$builder = $form->getConfig()->getFormFactory()->createNamedBuilder(
+//  'partenaires',
+//  EntityType::class,
+//  null,
+//  [
+//      'class' => Partenaire::class,
+//      'choice_label' => 'nom',
+//      'placeholder' => '',
+//      'mapped' => true,
+//      'required' => false,
+//      'auto_initialize' => false,
+//  ]
+//  );
+//  $builder->addEventListener(
+//      FormEvents::POST_SUBMIT,
+//      function (FormEvent $event) {
+//        $form = $event->getForm();
+//      }
+//    );
+//    $form->add($builder->getForm());
+//  }
 
 
 

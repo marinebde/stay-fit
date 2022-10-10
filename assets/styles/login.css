@@ -1,17 +1,16 @@
-body {
-    background-color: #fff;
+.body-connexion {
+    background-color: #2c4d90;
+    height: 70vw;
 }
 
 .form-signin {
     width: 100%;
     max-width: 330px;
-    padding: 15px;
+    height: 18em;
+    padding: 30px;
     margin: auto;
-    margin-top: 50px;
-}
-
-.form-signin .checkbox {
-    font-weight: 400;
+    background-color: #dfe0e0;
+    border-radius: 30px;
 }
 
 .form-signin .form-control {
@@ -30,10 +29,26 @@ body {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+    margin-bottom: 30px;
+    margin-top: 10px;
 }
 
 .form-signin input[type="password"] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    margin-bottom: 30px;
 }
+
+.btn-connexion{
+    width: 100%;
+    border-radius: 30px;
+    background: 
+        linear-gradient(90deg, #2C4D90 0%, 
+      rgba(50, 130, 224, 0.74) 72.33%);
+    font-family: 'Palanquin', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+

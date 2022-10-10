@@ -2,12 +2,16 @@
 
 {% block title %}Edit Structure{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-    <h1>Edit Structure</h1>
 
-    {{ include('structure/_form.html.twig', {'button_label': 'Update'}) }}
+    <a class="btn-retour-new-structure" href="{{ path('app_structure_index') }}">Retour</a>
+    <h1 class="titre-structure-nouveau text-center">Modifier Structure</h1>
 
-    <a href="{{ path('app_structure_index') }}">back to list</a>
+    {{ include('structure/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-    {{ include('structure/_delete_form.html.twig') }}
+
 {% endblock %}

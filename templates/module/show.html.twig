@@ -2,29 +2,35 @@
 
 {% block title %}Module{% endblock %}
 
-{% block body %}
-    <h1>Module</h1>
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
 
-    <table class="table">
-        <tbody>
+{% block body %}
+    <a class="btn-retour-show-module" href="{{ path('app_module_index') }}">Retour</a>
+
+    <h1 class="titre-module-show text-center">{{ module.nom }}</h1>
+
+    <div class="global-button-edit-module mb-5">
+      <a class="button-edit-module" href="{{ path('app_module_edit', {'id': module.id}) }}">Modifier</a>
+    </div>
+
+
+    <table class="table table-hover container">
+        <tbody class="tr-show-module">
             <tr>
-                <th>Id</th>
+                <th class="th-show-module">Id</th>
                 <td>{{ module.id }}</td>
             </tr>
             <tr>
-                <th>Nom</th>
+                <th class="th-show-module">Nom</th>
                 <td>{{ module.nom }}</td>
             </tr>
             <tr>
-                <th>Statut</th>
-                <td>{{ module.statut ? 'Yes' : 'No' }}</td>
+                <th class="th-show-module">Statut</th>
+                <td>{{ module.statut ? 'Actif' : 'Inactif' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_module_index') }}">back to list</a>
-
-    <a href="{{ path('app_module_edit', {'id': module.id}) }}">edit</a>
-
-    {{ include('module/_delete_form.html.twig') }}
 {% endblock %}

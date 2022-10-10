@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit StructureModules{% endblock %}
+
+{% block body %}
+    <h1>Edit StructureModules</h1>
+
+    {{ include('structure_modules/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_structure_modules_index') }}">back to list</a>
+
+    {{ include('structure_modules/_delete_form.html.twig') }}
+{% endblock %}

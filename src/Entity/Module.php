@@ -22,13 +22,21 @@ class Module
     #[ORM\Column]
     private ?bool $statut = null;
 
-    #[ORM\OneToMany(mappedBy: 'Modules', targetEntity: PartenaireModule::class)]
-    private Collection $partenaireModules;
+    #[ORM\ManyToMany(targetEntity: Partenaire::class, mappedBy: 'Modules')]
+    private Collection $partenaires;
+
+    #[ORM\OneToMany(mappedBy: 'module', targetEntity: StructureModules::class)]
+    private Collection $structure;
+
+
+
 
     public function __construct()
     {
-        $this->partenaireModules = new ArrayCollection();
+        $this->partenaires = new ArrayCollection();
+        $this->structure = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -59,33 +67,67 @@ class Module
         return $this;
     }
 
-    /**
-     * @return Collection<int, PartenaireModule>
-     */
-    public function getPartenaireModules(): Collection
+    public function __toString()
     {
-        return $this->partenaireModules;
+        return $this->nom;
     }
 
-    public function addPartenaireModule(PartenaireModule $partenaireModule): self
+    /**
+     * @return Collection<int, Partenaire>
+     */
+    public function getPartenaires(): Collection
     {
-        if (!$this->partenaireModules->contains($partenaireModule)) {
-            $this->partenaireModules->add($partenaireModule);
-            $partenaireModule->setModules($this);
+        return $this->partenaires;
+    }
+
+    public function addPartenaire(Partenaire $partenaire): self
+    {
+        if (!$this->partenaires->contains($partenaire)) {
+            $this->partenaires->add($partenaire);
+            $partenaire->addModule($this);
         }
 
         return $this;
     }
 
-    public function removePartenaireModule(PartenaireModule $partenaireModule): self
+    public function removePartenaire(Partenaire $partenaire): self
     {
-        if ($this->partenaireModules->removeElement($partenaireModule)) {
+        if ($this->partenaires->removeElement($partenaire)) {
+            $partenaire->removeModule($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StructureModules>
+     */
+    public function getStructure(): Collection
+    {
+        return $this->structure;
+    }
+
+    public function addStructure(StructureModules $structure): self
+    {
+        if (!$this->structure->contains($structure)) {
+            $this->structure->add($structure);
+            $structure->setModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStructure(StructureModules $structure): self
+    {
+        if ($this->structure->removeElement($structure)) {
             // set the owning side to null (unless already changed)
-            if ($partenaireModule->getModules() === $this) {
-                $partenaireModule->setModules(null);
+            if ($structure->getModule() === $this) {
+                $structure->setModule(null);
             }
         }
 
         return $this;
     }
+
+
 }

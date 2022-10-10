@@ -24,7 +24,7 @@ class StructureType extends AbstractType
             ->add('partenaire', EntityType::class, [
                 'class' => Partenaire::class,
                 'choice_label' => 'nom',
-                'label' => 'Partenaire structure'
+                'label' => 'Partenaire'
             ])
         ;
     }

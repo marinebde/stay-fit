@@ -55,10 +55,18 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-            $entityManager = $this->entityManager;
-            $user = $this->entityManager->getRepository(User::class);
 
-            $user = $this->security->getUser();
+        $entityManager = $this->entityManager;
+        $user = $this->entityManager->getRepository(User::class);
+
+        $user = $this->security->getUser();
+        
+            if($user->isStatut() == false){
+
+            return new RedirectResponse($this->urlGenerator->generate('app_login'));
+
+            }
+           
             $user->setDateConnexion(new DateTime());
 
             $entityManager->persist($user);

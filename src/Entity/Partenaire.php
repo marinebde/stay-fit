@@ -21,20 +21,22 @@ class Partenaire
     #[ORM\Column]
     private ?bool $statut = true;
 
-    #[ORM\OneToMany(mappedBy: 'partenaires', targetEntity: User::class)]
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'partenaires')]
     private Collection $users;
 
-    #[ORM\OneToMany(mappedBy: 'partenaire', targetEntity: Structure::class)]
+    #[ORM\OneToMany(targetEntity: Structure::class, mappedBy: 'partenaire')]
     private Collection $structures;
 
-    #[ORM\OneToMany(mappedBy: 'Partenaires', targetEntity: PartenaireModule::class)]
-    private Collection $partenaireModules;
+    #[ORM\ManyToMany(targetEntity: Module::class, inversedBy: 'partenaires')]
+    private Collection $Modules;
+
+
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->structures = new ArrayCollection();
-        $this->partenaireModules = new ArrayCollection();
+        $this->Modules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,32 +135,27 @@ class Partenaire
     }
 
     /**
-     * @return Collection<int, PartenaireModule>
+     * @return Collection<int, Module>
      */
-    public function getPartenaireModules(): Collection
+    public function getModules(): Collection
     {
-        return $this->partenaireModules;
+        return $this->Modules;
     }
 
-    public function addPartenaireModule(PartenaireModule $partenaireModule): self
+    public function addModule(Module $module): self
     {
-        if (!$this->partenaireModules->contains($partenaireModule)) {
-            $this->partenaireModules->add($partenaireModule);
-            $partenaireModule->setPartenaires($this);
+        if (!$this->Modules->contains($module)) {
+            $this->Modules->add($module);
         }
 
         return $this;
     }
 
-    public function removePartenaireModule(PartenaireModule $partenaireModule): self
+    public function removeModule(Module $module): self
     {
-        if ($this->partenaireModules->removeElement($partenaireModule)) {
-            // set the owning side to null (unless already changed)
-            if ($partenaireModule->getPartenaires() === $this) {
-                $partenaireModule->setPartenaires(null);
-            }
-        }
+        $this->Modules->removeElement($module);
 
         return $this;
     }
+
 }

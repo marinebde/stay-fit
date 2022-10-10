@@ -39,6 +39,22 @@ class StructureRepository extends ServiceEntityRepository
         }
     }
 
+     /**
+     * @return Structure[] Returns an array of Structure objects
+     */
+    public function findByPartenaire($partenaireId): array
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.partenaire', 'p', 'WITH', 'p = :p')
+            ->setParameter('p', $partenaireId)
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+
 //    /**
 //     * @return Structure[] Returns an array of Structure objects
 //     */

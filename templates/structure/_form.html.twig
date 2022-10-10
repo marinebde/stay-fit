@@ -1,4 +1,31 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr' : {'class' : 'form-structure'}}) }}
+
+<div class="form-container-row-structure-save">
+    {{ form_row(form.nom) }}
+    {{ form_row(form.adresse) }}
+    {{ form_row(form.code_postal) }}
+    {{ form_row(form.ville) }}
+    {{ form_row(form.nom_gerant) }}
+    </div>
+
+    <div class="form-container-row-structure-save-statut text-center">
+    {{ form_row(form.statut) }}
+    </div>
+
+    <hr>
+
+    <div class="form-container-row-structure-save-partenaire text-center">
+    {{ form_row(form.partenaire, {'attr' : {'class' : 'partenaire'}}) }}
+    </div>
+
+<div class="container-btn-save-structure">
+    <button
+     id="save" 
+     class="btn btn-save-structure"
+     data-path = "{{ path('app_structure_new')}}"
+     >
+     {{ button_label|default('Enregistrer') }}
+     </button>
+</div>
 {{ form_end(form) }}
+

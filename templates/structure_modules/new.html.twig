@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New StructureModules{% endblock %}
+
+{% block body %}
+    <h1>Create new StructureModules</h1>
+
+    {{ include('structure_modules/_form.html.twig') }}
+
+    <a href="{{ path('app_structure_modules_index') }}">back to list</a>
+{% endblock %}

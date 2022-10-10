@@ -2,23 +2,32 @@
 
 {% block title %}Utilisateurs{% endblock %}
 
-{% block body %}
-    <h1>Liste des utilisateurs</h1>
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
 
-    <table class="table">
-        <thead>
+{% block body %}
+    <h1 class="text-center mb-5 titre-utilisateur-index">Liste des utilisateurs</h1>
+
+    <div class="text-center mb-5">
+        <a class="btn-center btn-new-utilisateur" href="{{ path('app_register') }}">Nouvel utilisateur</a>
+    </div>
+
+    <div class="text-center pt-3">
+    <table class="table table-hover container" id="formCheck">
+        <thead class="thead-light thead-index-utilisateur">
             <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Statut</th>
-                <th>Date de connexion</th>
-                <th>actions</th>
+                <th class="th-index-utilisateur">ID</th>
+                <th class="th-index-utilisateur">NOM</th>
+                <th class="th-index-utilisateur">PRÉNOM</th>
+                <th class="th-index-utilisateur">EMAIL</th>
+                <th class="th-index-utilisateur">ROLE</th>
+                <th class="th-index-utilisateur">STATUT</th>
+                <th class="th-index-utilisateur">DATE CONNEXION</th>
+                <th class="th-index-utilisateur">ACTIONS</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="tr-index-utilisateur">
         {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
@@ -26,11 +35,45 @@
                 <td>{{ user.prenom }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.statut ? 'Yes' : 'No' }}</td>
-                <td>{{ user.dateConnexion ? user.dateConnexion|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+    <div class="form-check form-switch form-switch-user-statut">
+            <input 
+            class="form-check-input"
+            type="checkbox"
+            id="{{ user.id }}"
+            name="{{ user.id }}"
+            value="{{ user.id }}"
+            data-path = "{{ path('app_user_edit_statut', {id: user.id }) }}"
+            {{ user.statut ? "checked" : "" }}
+            data-toggle="modal"
+            data-target="#exampleModal"
+    >
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modification statut</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir modifier le statut?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+        <button type="button" class="btn btn-primary">Oui</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+                </td>
+                <td>{{ user.dateConnexion ? user.dateConnexion|date('Y-m-d') : '' }}</td>
+                
+                <td class="td-actions-index-utilisateur">
+                    <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_user_show', {'id': user.id}) }}"></a>
+                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_user_edit', {'id': user.id}) }}"></a>
                 </td>
             </tr>
         {% else %}
@@ -38,8 +81,67 @@
                 <td colspan="7">no records found</td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
 
-    <a href="{{ path('app_register') }}">Créer nouveau</a>
+    </div>
+
+  <script>
+
+$('#formCheck').on("change","input[type=checkbox]", function(){
+  
+    const modal = document.getElementById('exampleModal')
+    const footer = modal.getElementsByClassName('modal-footer')[0].children[1]  
+
+    footer.addEventListener('click', (event)=> {
+    event.preventDefault();
+    const url = $(this).data('path')
+            
+        if($(this).is(':checked')){
+
+        var val = true;
+
+        $.ajax({
+            type:     'POST',
+            url:       url,  
+            data:  { statut : val },
+            success: function(reponse){
+               // $('#magasinDatas').html(data);
+               console.log(reponse);
+            }
+        })
+        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                        location.reload();                     
+        } else {
+
+        val = false;
+
+        $.ajax({
+            type:     'POST',
+            url:       url,  
+            data: { statut : val },
+            success: function(reponse){
+               // $('#magasinDatas').html(data);
+               console.log(reponse);
+            }
+        })
+        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                        location.reload();                       
+    }
+    })
+});
+            
+</script>
+
 {% endblock %}

@@ -33,16 +33,20 @@ class Structure
     #[ORM\Column(length: 80)]
     private ?string $nom_gerant = null;
 
-    #[ORM\OneToMany(mappedBy: 'structures', targetEntity: User::class)]
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'structures')]
     private Collection $users;
 
-    #[ORM\ManyToOne(inversedBy: 'structures')]
+    #[ORM\ManyToOne(targetEntity: Partenaire::class, inversedBy: 'structures', cascade : ['persist'] )]
     private ?Partenaire $partenaire = null;
+
+    #[ORM\OneToMany(mappedBy: 'structure', targetEntity: StructureModules::class)]
+    private Collection $modules;
 
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->modules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,6 +169,38 @@ class Structure
     public function setPartenaire(?Partenaire $partenaire): self
     {
         $this->partenaire = $partenaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StructureModules>
+     */
+    public function getModules(): Collection
+    {
+        return $this->modules;
+    }
+
+    public function addModule(StructureModules $module): self
+    {
+        if (!$this->modules->contains($module)) {
+            $this->modules->add($module);
+            $module->setStructure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModule(StructureModules $module): self
+    {
+        if ($this->modules->removeElement($module)) {
+            // set the owning side to null (unless already changed)
+            if ($module->getStructure() === $this) {
+                $module->setStructure(null);
+                $module->setIsActive(false);
+                $module->setModule(null);
+            }
+        }
 
         return $this;
     }

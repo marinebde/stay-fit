@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StructureModules index{% endblock %}
+
+{% block body %}
+    <h1>StructureModules index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Is_active</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for structure_module in structure_modules %}
+            <tr>
+                <td>{{ structure_module.id }}</td>
+                <td>{{ structure_module.isActive ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_structure_modules_show', {'id': structure_module.id}) }}">show</a>
+                    <a href="{{ path('app_structure_modules_edit', {'id': structure_module.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_structure_modules_new') }}">Create new</a>
+{% endblock %}

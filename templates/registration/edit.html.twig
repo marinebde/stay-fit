@@ -2,22 +2,17 @@
 
 {% block title %}Edit Utilisateur{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
-    <h1>Edit User</h1>
-{{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.statut) }}
-        {{ form_row(registrationForm.roles) }}
-        {{ form_row(registrationForm.partenaires) }}
-        {{ form_row(registrationForm.structures) }}
-    
-        <button type="submit" class="btn">Register</button>
-{{ form_end(registrationForm) }}
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+   <a class="btn-retour-edit-utilisateur" href="{{ path('app_user_index') }}">Retour</a>
 
-    {{ include('registration/_delete_form.html.twig') }}
+    <h1 class="titre-utilisateur-edit text-center">Modifier Utilisateur</h1>
+
+    {{ include('registration/register.html.twig', {'button_label': 'Enregistrer'}) }}
+
+
 {% endblock %}

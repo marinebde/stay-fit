@@ -1,0 +1,95 @@
+.btn-retour-new-module {
+    border-radius: 30px;
+    background: 
+        linear-gradient(90deg, #2C4D90 0%, 
+        rgba(229, 229, 229, 0.74) 72.33%);
+    font-family: 'Palanquin', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0C1120;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    position: absolute;
+    left: 80em;
+    top: 10em;
+}
+
+.btn-retour-new-module:hover {
+    color: #0C1120;
+    background: 
+        linear-gradient(90deg, 
+        rgba(229, 229, 229, 0.74) 0%, rgba(44, 77, 144, 0.75) 96.45%);
+}
+
+.titre-module-nouveau {
+    color: #0C1120;
+    margin-top: 3em;
+    margin-bottom: 1.5em;
+    font-family: Pt, serif;
+    font-size: 32px;
+    letter-spacing: 0.1px;
+}
+
+.form-save-module {
+    width: 100%;
+    max-width: 50%;
+    height: auto;
+    padding: 30px;
+    margin: auto;
+    margin-bottom: 10em;
+    background-color: #dfe0e0;
+    border-radius: 30px;
+    font-size: 16px;
+}
+.form-save-module input {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-bottom: 30px;
+    margin-top: 10px;
+   
+}
+
+.form-container-row-module-save {
+    display: grid;
+    justify-content: center;
+    justify-items: start;
+}
+
+.form-container-row-module-save label {
+    font-family: 'palanquin', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-right: 0.8em;
+}
+
+.container-btn-save-module {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-save-module {
+    width: 10em;
+    color: #0C1120;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 30px;
+    background: 
+        linear-gradient(90deg, #2C4D90 0%, 
+        rgba(229, 229, 229, 0.74) 72.33%);
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 600;
+    border: 1px solid #0C1120;
+}
+
+.btn-save-module:hover {
+    color: #0C1120;
+    background: 
+        linear-gradient(90deg, 
+        rgba(229, 229, 229, 0.74) 0%, rgba(44, 77, 144, 0.75) 96.45%);
+}

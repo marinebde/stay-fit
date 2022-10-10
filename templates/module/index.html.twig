@@ -2,27 +2,69 @@
 
 {% block title %}Module index{% endblock %}
 
-{% block body %}
-    <h1>Module index</h1>
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
 
-    <table class="table">
-        <thead>
+{% block body %}
+    <h1 class="text-center mb-5 titre-module-index">Liste des modules</h1>
+
+     <div class="text-center mb-5">
+    <a class="btn-center btn-new-module" href="{{ path('app_module_new') }}">Nouveau module</a>
+    </div>
+
+<div class="text-center pt-3">
+    <table id="formCheck" class="table table-hover container">
+        <thead class="thead-light thead-index-module">
             <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Statut</th>
-                <th>actions</th>
+                <th class="th-index-module">ID</th>
+                <th class="th-index-module">NOM</th>
+                <th class="th-index-module">STATUT</th>
+                <th class="th-index-module">ACTIONS</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="tr-index-module">
         {% for module in modules %}
             <tr>
                 <td>{{ module.id }}</td>
                 <td>{{ module.nom }}</td>
-                <td>{{ module.statut ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('app_module_show', {'id': module.id}) }}">show</a>
-                    <a href="{{ path('app_module_edit', {'id': module.id}) }}">edit</a>
+            <div class="form-check form-switch form-switch-statut-partenaire">
+            <input 
+            class="form-check-input"
+            type="checkbox"
+            id="{{ module.id }}"
+            name="{{ module.nom }}"
+            value="{{ module.id }}"
+            data-path = "{{ path('app_module_edit_statut', {id: module.id }) }}"
+            {{ module.statut ? "checked" : "" }}
+            data-toggle="modal"
+            data-target="#exampleModal"
+    >
+     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modification statut</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Êtes-vous sûre de vouloir modifier le statut?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+        <button type="button" class="btn btn-primary">Oui</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+                </td>
+                <td class="td-actions-index-module">
+                    <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_module_show', {'id': module.id}) }}"></a>
+                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_module_edit', {'id': module.id}) }}"></a>
                 </td>
             </tr>
         {% else %}
@@ -32,6 +74,63 @@
         {% endfor %}
         </tbody>
     </table>
+    </div>
 
-    <a href="{{ path('app_module_new') }}">Create new</a>
+<script>
+
+$('#formCheck').on("change","input[type=checkbox]", function(){
+ 
+    const modal = document.getElementById('exampleModal')
+    const footer = modal.getElementsByClassName('modal-footer')[0].children[1]
+    console.log(footer)
+    
+    footer.addEventListener('click', (event)=> {
+    event.preventDefault();
+    const url = $(this).data('path')
+            
+        if($(this).is(':checked')){
+
+        var val = true;
+
+        $.ajax({
+            type:     'POST',
+            url:       url,  
+            data:  { statut : val },
+            success: function(reponse){
+               // $('#magasinDatas').html(data);
+               console.log(reponse);
+            }
+        })
+        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                        location.reload();                 
+        } else {
+
+        val = false;
+
+        $.ajax({
+            type:     'POST',
+            url:       url,  
+            data: { statut : val },
+            success: function(reponse){
+               // $('#magasinDatas').html(data);
+               console.log(reponse);
+            }
+        })
+        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                        location.reload();           
+    }
+    })
+});
+            
+</script>
 {% endblock %}

@@ -1,10 +1,21 @@
 {% block title %}Nouveau mot de passe{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('../assets/styles/newMotDePasse.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
  
 {% block body %}
-<h1>Renouvellement du mot de passe</h1>
-{{form_start(form)}}
+<h1 class="titre-new-mot-de-passe">Renouvellement du mot de passe</h1>
+{{form_start(form, {'attr' : {'class' : 'form-new-motdepasse'}})}}
+
+<div class="form-container-new-motdepasse">
 	{{form_row(form.plainPassword.first)}}
 	{{form_row(form.plainPassword.second)}}
-	<button class=""  type="submit">Envoyer</button>
+	</div>
+
+<div class="container-btn-save-motdepasse">
+	<button class="btn-save-motdepasse btn"  type="submit">Envoyer</button>
+</div>
+
 {{form_end(form)}}
 {% endblock %}

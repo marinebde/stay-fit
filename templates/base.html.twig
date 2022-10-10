@@ -4,8 +4,14 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Palanquin&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200&display=swap" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -16,43 +22,86 @@
         {% endblock %}
     </head>
     <body>
+    {% if is_granted('ROLE_ADMIN') %}
         <nav class="navbar navbar-expand-lg navbar-bg mb-5">
-            <a style="margin-left: 75px; color: #2c4d90;" class="navbar-brand space-brand" href="{{ path('app_home') }}">Stay Fit</a>
+            <a class="navbar-brand space-brand" href="{{ path('app_home') }}">
+                <img class="logo" src="{{ asset('images/logo.png') }}" alt="Logo">
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav mr-auto">
-                     <li class="nav-item">
-                       <a style="color: black;" class="nav-link" href="{{ path('app_user_index') }}">Utilisateurs</a>
+          <div class="collapse navbar-collapse container" id="navbarNavDropdown">
+                <ul class="navbar-nav mr-auto menu col-6">
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu" href="{{ path('app_user_index') }}">UTILISATEURS</a>
                      </li>
-                     <li class="nav-item">
-                       <a style="color: black;" class="nav-link" href="{{ path('app_partenaire_index') }}">Partenaires</a>
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu" href="{{ path('app_partenaire_index') }}">PARTENAIRES</a>
                      </li>
-                     <li class="nav-item">
-                       <a style="color: black;" class="nav-link" href="{{ path('app_structure_index') }}">Structures</a>
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu" href="{{ path('app_structure_index') }}">STRUCTURES</a>
                      </li>
-                     <li class="nav-item">
-                       <a style="color: black;" class="nav-link" href="{{ path('app_module_index') }}">Modules</a>
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu" href="{{ path('app_module_index') }}">MODULES</a>
                      </li>
-                   </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-info my-2 my-sm-0" type="submit">Recherche</button>
-                </form>
-                <ul class="navbar-nav ml-auto">
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <li class="nav-item">
-                        <a style="color: black;" class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                </ul>
+
+                <div class="col-3"></div>
+
+                <ul class="navbar-nav ml-auto col-3 ul-btn-connexion">
+                    <li class="nav-item li-btn-connexion">
+                        <a class="nav-link nav-link-connexion" href="{{ path('app_logout') }}">DECONNEXION</a>
                     </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a style="color: black;" class="nav-link" href="{{ path('app_login') }}">Connexion</a>
-                    </li>
-                    {% endif %}
                 </ul>
             </div>
         </nav>
-        {% block body %}{% endblock %}
-    </body>
+    
+    {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% if  (is_granted('ROLE_STRUCTURE') and ('ROLE_PARTENAIRE') ) %}
+        <nav class="navbar navbar-expand-lg navbar-bg mb-5">
+            <a class="navbar-brand space-brand" href="{{ path('app_home') }}">
+                <img class="logo" src="{{ asset('images/logo.png') }}" alt="Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse container" id="navbarNavDropdown">
+                <ul class="navbar-nav mr-auto menu col-6">
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_user_index') }}">UTILISATEURS</a>
+                     </li>
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_partenaire_index') }}">PARTENAIRES</a>
+                     </li>
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_structure_index') }}">STRUCTURES</a>
+                     </li>
+                     <li class="nav-item-menu">
+                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_module_index') }}">MODULES</a>
+                     </li>
+                </ul>
+
+                <div class="col-3"></div>
+
+                <ul class="navbar-nav ml-auto col-3">
+                    <li class="nav-item li-btn-connexion">
+                        <a class="nav-link nav-link-connexion" href="{{ path('app_logout') }}">DECONNEXION</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        {% endif %}
+        {% else %}
+          <div class="body">
+              <img class="logo logo-connexion" src="{{ asset('images/logo.png') }}" alt="Logo">
+          </div>
+        {% endif %}
+    {% block body %}
+    {% endblock %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
 </html>

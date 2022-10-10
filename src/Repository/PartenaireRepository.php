@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Partenaire;
+use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,6 +39,9 @@ class PartenaireRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+//
+
 
 //    /**
 //     * @return Partenaire[] Returns an array of Partenaire objects
