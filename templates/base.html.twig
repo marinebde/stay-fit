@@ -28,31 +28,31 @@
                 <img class="logo" src="{{ asset('images/logo.png') }}" alt="Logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse container" id="navbarNavDropdown">
-                <ul class="navbar-nav mr-auto menu col-6">
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu" href="{{ path('app_user_index') }}">UTILISATEURS</a>
-                     </li>
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu" href="{{ path('app_partenaire_index') }}">PARTENAIRES</a>
-                     </li>
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu" href="{{ path('app_structure_index') }}">STRUCTURES</a>
-                     </li>
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu" href="{{ path('app_module_index') }}">MODULES</a>
-                     </li>
-                </ul>
+              <span class="navbar-toggler-icon"></span>
+             </button>
+            <div class="collapse navbar-collapse container" id="navbarNavDropdown">
+              <ul class="navbar-nav mr-auto menu col-6">
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu" href="{{ path('app_user_index') }}">UTILISATEURS</a>
+                </li>
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu" href="{{ path('app_partenaire_index') }}">PARTENAIRES</a>
+                </li>
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu" href="{{ path('app_structure_index') }}">STRUCTURES</a>
+                </li>
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu" href="{{ path('app_module_index') }}">MODULES</a>
+                </li>
+              </ul>
 
-                <div class="col-3"></div>
+              <div class="col-3"></div>
 
-                <ul class="navbar-nav ml-auto col-3 ul-btn-connexion">
-                    <li class="nav-item li-btn-connexion">
-                        <a class="nav-link nav-link-connexion" href="{{ path('app_logout') }}">DECONNEXION</a>
-                    </li>
-                </ul>
+              <ul class="navbar-nav ml-auto col-3 ul-btn-connexion">
+                <li class="nav-item li-btn-connexion">
+                  <a class="nav-link nav-link-connexion" href="{{ path('app_logout') }}">DECONNEXION</a>
+                </li>
+              </ul>
             </div>
         </nav>
     
@@ -60,34 +60,34 @@
         {% if  (is_granted('ROLE_STRUCTURE') and ('ROLE_PARTENAIRE') ) %}
         <nav class="navbar navbar-expand-lg navbar-bg mb-5">
             <a class="navbar-brand space-brand" href="{{ path('app_home') }}">
-                <img class="logo" src="{{ asset('images/logo.png') }}" alt="Logo">
+              <img class="logo" src="{{ asset('images/logo.png') }}" alt="Logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse container" id="navbarNavDropdown">
-                <ul class="navbar-nav mr-auto menu col-6">
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_user_index') }}">UTILISATEURS</a>
-                     </li>
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_partenaire_index') }}">PARTENAIRES</a>
-                     </li>
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_structure_index') }}">STRUCTURES</a>
-                     </li>
-                     <li class="nav-item-menu">
-                       <a class="nav-link nav-link-menu disabled" href="{{ path('app_module_index') }}">MODULES</a>
-                     </li>
-                </ul>
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse container" id="navbarNavDropdown">
+              <ul class="navbar-nav mr-auto menu col-6">
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu disabled" href="{{ path('app_user_index') }}">UTILISATEURS</a>
+                </li>
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu disabled" href="{{ path('app_partenaire_index') }}">PARTENAIRES</a>
+                </li>
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu disabled" href="{{ path('app_structure_index') }}">STRUCTURES</a>
+                </li>
+                <li class="nav-item-menu">
+                  <a class="nav-link nav-link-menu disabled" href="{{ path('app_module_index') }}">MODULES</a>
+                </li>
+              </ul>
 
-                <div class="col-3"></div>
+              <div class="col-3"></div>
 
-                <ul class="navbar-nav ml-auto col-3">
-                    <li class="nav-item li-btn-connexion">
-                        <a class="nav-link nav-link-connexion" href="{{ path('app_logout') }}">DECONNEXION</a>
-                    </li>
-                </ul>
+              <ul class="navbar-nav ml-auto col-3">
+                <li class="nav-item li-btn-connexion">
+                  <a class="nav-link nav-link-connexion" href="{{ path('app_logout') }}">DECONNEXION</a>
+                </li>
+              </ul>
             </div>
         </nav>
         {% endif %}

@@ -30,6 +30,22 @@ class Mailer {
         $this->mailer->send($email);
     }
 
+    public function sendPartenaire($email, $user) 
+    {
+
+        $email = (new TemplatedEmail())
+        ->from('mbcontactservice@gmail.com')
+        ->to($email)
+        ->subject('Nouvelle structure')
+        ->htmlTemplate('partenaire/mailnewstructure.html.twig')
+        ->context([
+            'user' => $user,
+            ])
+        ;
+
+        $this->mailer->send($email);
+    }
+
 
 
 

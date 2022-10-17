@@ -53,6 +53,25 @@ class StructureRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getFilters($statut, $search)
+    {
+        $qb =  $this->createQueryBuilder('s')
+           ->where('s.nom LIKE :val')
+           ->setParameter('val', '%'.$search.'%')
+           ;
+
+           if ($statut) {
+            $qb
+            ->andWhere('s.statut IN (:statut)')
+           ->setParameter(':statut', is_array($statut)? array_values($statut): array())
+           ;
+           }
+
+           return $qb
+           ->getQuery()
+           ->getResult()
+       ;
+    }
 
 
 //    /**

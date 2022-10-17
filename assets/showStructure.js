@@ -1,11 +1,13 @@
-$('#formCheck').on("change","input[type=checkbox]", function(){
+$('#formCheckModule').on("change","input[type=checkbox]", function(){
  
     const modal = document.getElementById('exampleModal')
     const footer = modal.getElementsByClassName('modal-footer')[0].children[1]
     
     footer.addEventListener('click', (event)=> {
     event.preventDefault();
+   
     const url = $(this).data('path')
+    const id = $(this).data('id')
             
         if($(this).is(':checked')){
 
@@ -14,7 +16,7 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
         $.ajax({
             type:     'POST',
             url:       url,  
-            data:  { statut : val },
+            data:  { etat : val, id : id },
             success: function(reponse){
                // $('#magasinDatas').html(data);
                console.log(reponse);
@@ -26,8 +28,7 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
                         .catch(function (error) {
                             console.log(error);
                         });
-                        location.reload(); 
-                                        
+                        location.reload();
         } else {
 
         val = false;
@@ -35,7 +36,7 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
         $.ajax({
             type:     'POST',
             url:       url,  
-            data: { statut : val },
+            data: { etat : val, id : id },
             success: function(reponse){
                // $('#magasinDatas').html(data);
                console.log(reponse);
@@ -47,7 +48,7 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
                         .catch(function (error) {
                             console.log(error);
                         });
-                        location.reload();                             
+                        location.reload();       
     }
     })
 });

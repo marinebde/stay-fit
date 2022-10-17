@@ -1,25 +1,24 @@
 <div>
-
 {{ form_start(form, {'attr' : {'class' : 'form-partenaire'}}) }}
     <div class="form-container-row-partenaire-edit text-center">
-    {{ form_row(form.nom) }}
-    {{ form_row(form.statut) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.statut) }}
     </div>
     <hr>
 
     <div class="form-container-row-partenaire-edit-modules text-center">
-    {{ form_row(form.modules, {'attr' : {'class' : 'form-row-partenaire-edit-modules'}}) }}
+        {{ form_row(form.modules, {'attr' : {'class' : 'form-row-partenaire-edit-modules'}}) }}
     </div>
 
     {% for message in app.flashes('notice') %}
     <div class="flash-notice alert alert-danger text-center">
         {{ message }}
     </div>
-{% endfor %}
+    {% endfor %}
     
 
     <div class="container-btn-save-partenaire">
-    <button class="btn-save-partenaire">{{ button_label|default('Enregistrer') }}</button>
+        <button class="btn-save-partenaire">{{ button_label|default('Enregistrer') }}</button>
     </div>
 {{ form_end(form) }}
 </div>

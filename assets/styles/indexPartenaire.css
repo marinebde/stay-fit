@@ -31,6 +31,31 @@
         rgba(229, 229, 229, 0.74) 0%, rgba(44, 77, 144, 0.75) 96.45%);
 }
 
+.row-filters {
+    margin-top: 7em;
+}
+
+#search {
+    width: 50%;
+    margin-left: 5em;
+}
+
+.titre-filtre-statut {
+    background-color: rgb(50, 130, 224);
+    color: #dfe0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#filters {
+    display: flex;
+}
+
+.checkbox {
+    padding: 10px;
+}
+
 .thead-index-partenaire {
     background-color: rgb(50, 130, 224);
     color: #dfe0e0;

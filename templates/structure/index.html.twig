@@ -8,7 +8,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-  
+    {{ encore_entry_script_tags('indexStructure') }}
 {% endblock %}
 
 {% block body %}
@@ -17,129 +17,92 @@
     <h1 class="text-center mb-5 titre-structure-index">Liste des structures</h1>
 
     <div class="text-center mb-5">
-    <a class="btn-center btn-new-structure" href="{{ path('app_structure_new') }}">Nouvelle Structure</a>
+        <a class="btn-center btn-new-structure" href="{{ path('app_structure_new') }}">Nouvelle Structure</a>
     </div>
 
     
-<div class="text-center pt-3">
-    <table id="formCheck" class="table table-hover container">
-        <thead class="thead-light thead-index-structure">
-            <tr>
-                <th class="th-index-structure">ID</th>
-                <th class="th-index-structure">NOM</th>
-                <th class="th-index-structure">STATUT</th>
-                <th class="th-index-structure">ACTIONS</th>
-            </tr>
-        </thead>
-        <tbody class="tr-index-structure">
-        {% for structure in structures %}
-            <tr>
-                <td>{{ structure.id }}</td>
-                <td>{{ structure.nom }}</td>
-                <td>
-                <div class="form-check form-switch form-switch-statut-partenaire">
-            <input 
-            class="form-check-input"
-            type="checkbox"
-            id="{{ structure.id }}"
-            name="{{ structure.nom }}"
-            value="{{ structure.id }}"
-            data-path = "{{ path('app_structure_edit_statut', {id: structure.id }) }}"
-            {{ structure.statut ? "checked" : "" }}
-            {% if structure.partenaire.statut == false %}
-            disabled
-            {% endif %}
-            data-toggle="modal"
-            data-target="#exampleModal"
-    >
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modification statut</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Êtes-vous sûre de vouloir modifier le statut?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-        <button type="button" class="btn btn-primary">Oui</button>
-      </div>
+   <div class="row row-filters">
+   <div class="col">
+   <form id="form_recherche"  method="POST" class="search-structure">
+        <input type="search" name="recherche[]" id="search" placeholder="recherche">
+   </form>
+   </div>
+
+    <div class="filtre-structure col row">
+        <h5 class="titre-filtre-statut col">STATUT</h5>
+
+            <form id="filters" class="col">
+                <div class="checkbox">
+                    <input type="checkbox" name="statut[]" value="1" id="actif">
+                    <label for="actif">Actif</label>
+                </div>
+        
+                <div class="checkbox">
+                    <input type="checkbox" name="statut[]" value="" id="inactif">
+                    <label for="inactif">Inactif</label>
+                </div>
+            </form>
     </div>
-  </div>
-</div>
-</div>
-                </td>
-                <td class="td-actions-index-structure">
-                    <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structure.id}) }}"></a>
-                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_structure_edit', {'id': structure.id}) }}"></a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">pas de résultat trouvé</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>    
+    <div class="col"></div>
+    </div>
+   
+      <div id="formCheck">
+     {% include 'structure/structureList.html.twig' %}
+     </div>   
 
     {% elseif is_granted('ROLE_STRUCTURE') %}
 
         <div class="text-center mb-5">
-        <h1 class="text-center mb-5 titre-structure-index">Structure {{ app.user.structures.nom }}</h1>
-         {% if (app.user.structures.statut == true) %}
-         <span class="statut-structure-index statut-actif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
-        {% elseif (app.user.structures.statut == false) %}
-        <span class="statut-structure-index statut-inactif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
-        {% endif %}
+            <h1 class="text-center mb-5 titre-structure-index">Structure {{ app.user.structures.nom }}</h1>
+            {% if (app.user.structures.statut == true) %}
+                <span class="statut-structure-index statut-actif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
+            {% elseif (app.user.structures.statut == false) %}
+                <span class="statut-structure-index statut-inactif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
+            {% endif %}
         </div>
         
         <div class="container-structure-info">
-        <div class="info-structure-index row">
-        <span class="titre-info-structure-index col">Adresse :</span>
-        <span class="value-info-structure-index col">{{ app.user.structures.adresse }}</span>
-        </div>
+            <div class="info-structure-index row">
+                <span class="titre-info-structure-index col">Adresse :</span>
+                <span class="value-info-structure-index col">{{ app.user.structures.adresse }}</span>
+            </div>
 
-        <div class="info-structure-index row">
-        <span class="titre-info-structure-index col">Code Postal : </span>
-        <span class="value-info-structure-index col">{{ app.user.structures.codePostal }}</span>
-        </div>
+            <div class="info-structure-index row">
+                <span class="titre-info-structure-index col">Code Postal : </span>
+                <span class="value-info-structure-index col">{{ app.user.structures.codePostal }}</span>
+            </div>
 
-        <div class="info-structure-index row">
-        <span class="titre-info-structure-index col">Ville :</span>
-        <span class="value-info-structure-index col">{{ app.user.structures.ville }}</span>
-        </div>
+            <div class="info-structure-index row">
+                <span class="titre-info-structure-index col">Ville :</span>
+                <span class="value-info-structure-index col">{{ app.user.structures.ville }}</span>
+            </div>
 
-        <div class="info-structure-index row">
-        <span class="titre-info-structure-index col">Gérant :</span>
-        <span class="value-info-structure-index col">{{ app.user.structures.nomGerant }}</span>
-        </div>
+            <div class="info-structure-index row">
+                <span class="titre-info-structure-index col">Gérant :</span>
+                <span class="value-info-structure-index col">{{ app.user.structures.nomGerant }}</span>
+            </div>
        
         </div>
 
 
-         <h2 class="text-center">Liste des modules</h1>
-         <table class="table table-hover container">
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Statut</th>
-            </tr>
-        </thead>
-        <tbody>
+        <h2 class="text-center">Liste des modules</h1>
+            <table class="table table-hover container">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+            <tbody>
 
                 {% for module in app.user.structures.modules %}
                 <tr>
-                <td>{{ module.module.nom }}</td>
-                <td>{{ module.isActive ? 'Actif' : 'Inactif' }}</td>
+                    <td>{{ module.module.nom }}</td>
+                    <td>{{ module.isActive ? 'Actif' : 'Inactif' }}</td>
                 </tr>
                 {% endfor %}
-        </tbody>
-        </table>
+            </tbody>
+            </table>
 
     {% endif %}
 {% endblock %}

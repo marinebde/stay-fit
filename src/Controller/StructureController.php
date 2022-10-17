@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Structure;
 use App\Entity\StructureModules;
 use App\Form\StructureType;
+use App\Form\SearchForm;
 use App\Repository\ModuleRepository;
+use App\Repository\UserRepository;
 use App\Repository\StructureModulesRepository;
 use App\Repository\StructureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\Mailer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 
@@ -30,11 +34,39 @@ class StructureController extends AbstractController
 /**
 * @IsGranted("ROLE_STRUCTURE")
 */
-   #[Route('/index', name: 'app_structure_index', methods: ['GET'])]
-   public function index(StructureRepository $structureRepository): Response
+   #[Route('/index', name: 'app_structure_index', methods: ['GET', 'POST'])]
+   public function index(StructureRepository $structureRepository, Request $request): Response
    {
+        $form = $this->createForm(SearchForm::class);
+
+        // On récupère le filtre Statut
+        $statut = $request->get("statut");
+
+        // On récupère le filtre Search
+        $search = $request->get("recherche");
+
+        // On récupère les partenaires en fonction du filtre
+        $structures = $structureRepository->getFilters($statut, $search);
+
+        // On vérifie si on a une requête Ajax
+        if($request->get("ajax")) {
+            if($statut or $search) {
+            return new JsonResponse([
+                'content' => $this->renderView('structure/structureList.html.twig', [
+                    'structures' => $structures,
+                ])
+            ]);
+        } else {
+            return new JsonResponse([
+                'content' => $this->renderView('structure/structureList.html.twig', [
+                    'structures' => $structureRepository->findAll(),
+                ])
+            ]);  
+        }}
+
        return $this->render('structure/index.html.twig', [
            'structures' => $structureRepository->findAll(),
+           'form' => $form->createView(),
        ]);
    }
 
@@ -42,7 +74,7 @@ class StructureController extends AbstractController
 * @IsGranted("ROLE_ADMIN")
 */
     #[Route('/new', name: 'app_structure_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, StructureRepository $structureRepository, ModuleRepository $moduleRepository): Response
+    public function new(Request $request, StructureRepository $structureRepository, ModuleRepository $moduleRepository, Mailer $mailer, UserRepository $UserRepository): Response
     {   
         
         $structure = new Structure();
@@ -59,12 +91,18 @@ class StructureController extends AbstractController
 
             //récupère l'id du partenaire associé à la structure
             $partenaireId = $structure->getPartenaire()->getId();
+            $UserPartenaire = $UserRepository->getPartenaire($partenaireId);
 
-             //récupère les modules associés au partenaire
-             $modules = $moduleRepository->findByPartenaire($partenaireId);
+            foreach($UserPartenaire as $user){
+                $email = $user->getEmail();
+                $user = $user->getPrenom();
+            }
+
+            //récupère les modules associés au partenaire
+            $modules = $moduleRepository->findByPartenaire($partenaireId);
 
             ////boucle sur les modules
-           foreach ($modules as $module) {
+            foreach ($modules as $module) {
               // Création d'un structure_module
               $structureModule = new StructureModules();
               $structureModule->setIsActive(true);
@@ -76,6 +114,9 @@ class StructureController extends AbstractController
               $this->entityManager->flush();
 
            }
+
+           $this->mailer= $mailer;
+           $this->mailer->sendPartenaire($email, $user);
             
            return $this->redirectToRoute('app_structure_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -133,16 +174,13 @@ public function editModule(Request $request, StructureModulesRepository $structu
 
     $module = $structureModulesRepository->find($idStructureModule);
     
-    
 
     if  ($valueCheckbox == "true") {
-
         
-            $module->setIsActive(true);
-            $this->entityManager->persist($structure);
-            $this->entityManager->flush();
-
-            return new JsonResponse();
+        $module->setIsActive(true);
+        $this->entityManager->persist($structure);
+        $this->entityManager->flush();
+        return new JsonResponse();
 
    } else {
    

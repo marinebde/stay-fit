@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Partenaire;
 use App\Entity\StructureModules;
 use App\Form\PartenaireType;
+use App\Form\SearchForm;
 use App\Repository\ModuleRepository;
 use App\Repository\PartenaireRepository;
 use App\Repository\StructureModulesRepository;
@@ -16,6 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 #[Route('/partenaire')]
 class PartenaireController extends AbstractController
@@ -29,12 +32,41 @@ class PartenaireController extends AbstractController
 /**
 * @IsGranted("ROLE_PARTENAIRE")
 */
-    #[Route('/', name: 'app_partenaire_index', methods: ['GET'])]
-    public function index(PartenaireRepository $partenaireRepository): Response
-    {       
-            return $this->render('partenaire/index.html.twig', [
-                'partenaires' => $partenaireRepository->findAll(),
-            ]);
+    #[Route('/', name: 'app_partenaire_index', methods: ['GET', 'POST'])]
+    public function index(PartenaireRepository $partenaireRepository, Request $request): Response
+    {   
+        $form = $this->createForm(SearchForm::class);
+
+        // On récupère le filtre Statut
+        $statut = $request->get("statut");
+
+        // On récupère le filtre Search
+        $search = $request->get("recherche");
+
+        // On récupère les partenaires en fonction des filtres
+        $partenaires = $partenaireRepository->getFilters($statut, $search);
+    
+        // On vérifie si on a une requête Ajax
+        if($request->get('ajax')) {
+            if($statut or $search) {
+                return new JsonResponse([
+                    'content' => $this->renderView('partenaire/partenaireList.html.twig', [
+                        'partenaires' => $partenaires,
+                    ])
+                ]);
+            } else {
+
+            return new JsonResponse([
+                'content' => $this->renderView('partenaire/partenaireList.html.twig', [
+                    'partenaires' => $partenaireRepository->findAll(),
+                ])
+            ]);  
+        }}
+        
+        return $this->render('partenaire/index.html.twig', [
+            'partenaires' => $partenaireRepository->findAll(),
+            'form' => $form->createView(),
+        ]);
     }
 
 /**
@@ -65,12 +97,12 @@ class PartenaireController extends AbstractController
             $this->entityManager->flush();
 
             return $this->redirectToRoute('app_partenaire_index', [], Response::HTTP_SEE_OTHER);
-        }}
+            }}
 
-        return $this->renderForm('partenaire/new.html.twig', [
-            'partenaire' => $partenaire,
-            'form' => $form,
-        ]);
+            return $this->renderForm('partenaire/new.html.twig', [
+                'partenaire' => $partenaire,
+                'form' => $form,
+            ]);
     }
 
 /**
@@ -83,10 +115,10 @@ class PartenaireController extends AbstractController
         $form->handleRequest($request);
 
 
-    return $this->renderForm('partenaire/show.html.twig', [
-        'partenaire' => $partenaire,
-        'form' => $form,
-    ]);
+        return $this->renderForm('partenaire/show.html.twig', [
+            'partenaire' => $partenaire,
+            'form' => $form,
+        ]);
 }
 
 /**
@@ -101,8 +133,6 @@ public function editModule(Request $request, Partenaire $partenaire, ModuleRepos
     $module = $module->find($idModule);
     $partenaireId = $partenaire->getId();
     $structurePartenaire = $structureRepository->findByPartenaire($partenaireId);
-   
-
 
     if  ($valueCheckbox == "true") {
         //Ajout du partenaireModule
@@ -143,8 +173,7 @@ public function editModule(Request $request, Partenaire $partenaire, ModuleRepos
             $this->entityManager->flush();
 
         return new JsonResponse();
-    }
-}
+    }}
 
 /**
 * @IsGranted("ROLE_ADMIN")
@@ -200,20 +229,21 @@ public function editStatut(Request $request, Partenaire $partenaire, StructureRe
                 
             } elseif ($partenaireStatut == false) {
             
-            // Edition du partenaire
-            $partenaireRepository->add($partenaire, true);
-            $this->entityManager->persist($partenaire);
-            $this->entityManager->flush();
-
-            // Désactivation des structures    
-            foreach ($structurePartenaire as $structure) {
-                $structure->setStatut(false);
+                // Edition du partenaire
+                $partenaireRepository->add($partenaire, true);
+                $this->entityManager->persist($partenaire);
                 $this->entityManager->flush();
 
-                $structureId = $structure->getId();
+                 // Désactivation des structures    
+                 foreach ($structurePartenaire as $structure) {
+                    $structure->setStatut(false);
+                    $this->entityManager->flush();
 
-                //Récupération des StructureModules de la structure
-                $structureModuleListe = $structureModuleRepository->findStructureModule($structureId);
+                    $structureId = $structure->getId();
+
+                     //Récupération des StructureModules de la structure
+                     $structureModuleListe = $structureModuleRepository->findStructureModule($structureId);
+
                     foreach ($structureModuleListe as $liste) {
                         
                         //Suppression des StructureModule pour cette structure
@@ -222,20 +252,20 @@ public function editStatut(Request $request, Partenaire $partenaire, StructureRe
                     }
 
                     // Boucle sur les modules du partenaire
-                foreach ($partenaireModule as $module) {
+                    foreach ($partenaireModule as $module) {
 
-                    //Création du nouveau StructureModule
-                      $structureModule = new StructureModules();
+                        //Création du nouveau StructureModule
+                          $structureModule = new StructureModules();
 
-                      $structureModule->setIsActive(true);
-                      $structureModule->setModule($module);
-                      $structureModule->setStructure(($structure));  
+                          $structureModule->setIsActive(true);
+                          $structureModule->setModule($module);
+                          $structureModule->setStructure(($structure));  
 
-                      $this->entityManager->persist($structureModule);
-                      $this->entityManager->flush();
+                          $this->entityManager->persist($structureModule);
+                          $this->entityManager->flush();
 
+                    }
                 }
-            }
 
             return $this->redirectToRoute('app_partenaire_index', [], Response::HTTP_SEE_OTHER);
         } else {
@@ -247,27 +277,28 @@ public function editStatut(Request $request, Partenaire $partenaire, StructureRe
                     $structureId = $structure->getId();
                     //Récupération des StructureModules de la structure
                     $structureModuleListe = $structureModuleRepository->findStructureModule($structureId);
-                    foreach ($structureModuleListe as $liste) {
+
+                        foreach ($structureModuleListe as $liste) {
+
+                             //Suppression des StructureModule pour cette structure
+                             $structureModuleRepository->remove($liste);
+                             $this->entityManager->flush();
+                        }
+
+                        // Boucle sur les modules du partenaire
+                        foreach ($partenaireModule as $module) {
                         
-                        //Suppression des StructureModule pour cette structure
-                        $structureModuleRepository->remove($liste);
-                        $this->entityManager->flush();
-                    }
-
-                // Boucle sur les modules du partenaire
-                foreach ($partenaireModule as $module) {
-
-                    //Création du nouveau StructureModule
-                      $structureModule = new StructureModules();
-
-                      $structureModule->setIsActive(true);
-                      $structureModule->setModule($module);
-                      $structureModule->setStructure(($structure));  
-
-                      $this->entityManager->persist($structureModule);
-                      $this->entityManager->flush();
-
-                }}
+                            //Création du nouveau StructureModule
+                              $structureModule = new StructureModules();
+                        
+                              $structureModule->setIsActive(true);
+                              $structureModule->setModule($module);
+                              $structureModule->setStructure(($structure));  
+                        
+                              $this->entityManager->persist($structureModule);
+                              $this->entityManager->flush();
+                        
+                        }}
              
 
             return $this->redirectToRoute('app_partenaire_index', [], Response::HTTP_SEE_OTHER);

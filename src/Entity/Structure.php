@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\StructureRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\StructureRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StructureRepository::class)]
 class Structure
@@ -13,9 +14,11 @@ class Structure
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['show_structure'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['show_structure'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 360)]
@@ -28,6 +31,7 @@ class Structure
     private ?string $ville = null;
 
     #[ORM\Column]
+    #[Groups(['show_structure'])]
     private ?bool $statut = null;
 
     #[ORM\Column(length: 80)]

@@ -1,0 +1,23 @@
+<table class="table table hover container">
+                <thead class="thead-light thead-index-partenaire">
+                    <tr>
+                        <th class="th-index-partenaire">ID</th>
+                        <th class="th-index-partenaire">NOM</th>
+                        <th class="th-index-partenaire">STATUT</th>
+                        <th class="th-index-partenaire">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody class="tr-index-partenaire">
+
+                    {% for structures in app.user.partenaires.structures %}
+                    <tr>
+                        <td>{{ structures.id }}</td>
+                        <td>{{ structures.nom }}</td>
+                        <td>{{ structures.statut ? 'Actif' : 'Inactif' }}</td>
+                        <td class="td-actions-index-partenaire">
+                            <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structures.id}) }}"></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
