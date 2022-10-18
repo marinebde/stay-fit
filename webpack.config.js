@@ -26,6 +26,8 @@ Encore
     .addEntry('indexStructure', './assets/indexStructure.js')
     .addEntry('showStructure', './assets/showStructure.js')
 
+    .addStyleEntry('editModule', './assets/styles/editModule.css')
+
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
