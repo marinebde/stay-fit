@@ -13,7 +13,7 @@
     padding-left: 15px;
     padding-right: 15px;
     position: absolute;
-    left: 80em;
+    left: 80%;
     top: 10em;
 }
 
@@ -35,7 +35,7 @@
 
 .form-save-module {
     width: 100%;
-    max-width: 50%;
+    max-width: 70%;
     height: auto;
     padding: 30px;
     margin: auto;

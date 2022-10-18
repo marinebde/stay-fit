@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="{{ asset('../assets/styles/indexUser.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -71,8 +72,8 @@
                 </td>
                 <td>{{ user.dateConnexion ? user.dateConnexion|date('Y-m-d') : '' }}</td>
                 <td class="td-actions-index-utilisateur">
-                    <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_user_show', {'id': user.id}) }}"></a>
-                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_user_edit', {'id': user.id}) }}"></a>
+                    <a class="fa fa-thin fa-eye btn btn-light link-action" href="{{ path('app_user_show', {'id': user.id}) }}"></a>
+                    <a class="fa fa-thin fa-pen-to-square btn btn-light link-action" href="{{ path('app_user_edit', {'id': user.id}) }}"></a>
                 </td>
             </tr>
         {% else %}

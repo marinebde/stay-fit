@@ -30,6 +30,30 @@
         rgba(229, 229, 229, 0.74) 0%, rgba(44, 77, 144, 0.75) 96.45%);
 }
 
+.row-filters {
+    margin-top: 7em;
+}
+
+#search {
+    width: 50%;
+    margin-left: 5em;
+}
+
+.titre-filtre-statut {
+    background-color: rgb(50, 130, 224);
+    color: #dfe0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#filters {
+    display: flex;
+}
+
+.checkbox {
+    padding: 10px;
+}
 
 .thead-index-structure {
     background-color: rgb(50, 130, 224);
@@ -61,6 +85,14 @@
     padding-left: 10px;
     padding-right: 10px;
     color: #dfe0e0;
+}
+
+.statut-actif {
+    background-color: green;
+}
+
+.statut-inactif {
+    background-color: red;
 }
 
 .container-structure-info {
@@ -95,4 +127,16 @@
     width: 10em;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 20px;
+}
+
+/* Tablette Responsive */
+
+@media screen and (max-width: 992px) {
+    .checkbox {
+       display: flex;
+    }
+
+    .checkbox>label {
+        padding-left: 0.3em;
+    }
 }

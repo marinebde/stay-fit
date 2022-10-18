@@ -4,6 +4,11 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="{{ asset('../assets/styles/showStructure.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
     {{ encore_entry_script_tags('showStructure') }}
 {% endblock %}
 

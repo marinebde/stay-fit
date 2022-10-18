@@ -4,10 +4,11 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="{{ asset('../assets/styles/login.css') }}" rel="stylesheet">
 {% endblock %}
 
+
 {% block body %}
-    <div class="body-connexion">
         <form class="form-signin" method="post">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -24,6 +25,5 @@
             Connexion
         </button>
         </form>
-    </div>
 {% endblock %}
 

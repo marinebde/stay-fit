@@ -55,3 +55,24 @@
     background-color: #dfe0e0 !important;
     color: #0C1120;
 }
+
+/* Tablette Responsive */
+
+@media screen and (max-width: 992px) {
+    .thead-index-utilisateur {
+        vertical-align: middle !important;
+    }
+
+    .tr-index-utilisateur {
+        vertical-align: middle !important;
+    }
+
+    .td-actions-index-utilisateur {
+        display: flex;
+    }
+
+    .link-action {
+        margin: 0.2em
+    }
+
+}

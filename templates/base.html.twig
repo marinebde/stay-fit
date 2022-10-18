@@ -24,14 +24,17 @@
     <body>
     {% if is_granted('ROLE_ADMIN') %}
         <nav class="navbar navbar-expand-lg navbar-bg mb-5">
+          <div class="container-fluid">
             <a class="navbar-brand space-brand" href="{{ path('app_home') }}">
                 <img class="logo" src="{{ asset('images/logo.png') }}" alt="Logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+              <span class="navbar-toggler-icon">
+                <i class="fas fa-bars"></i>
+              </span>
              </button>
-            <div class="collapse navbar-collapse container" id="navbarNavDropdown">
-              <ul class="navbar-nav mr-auto menu col-6">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul class="navbar-nav mr-auto menu col-7">
                 <li class="nav-item-menu">
                   <a class="nav-link nav-link-menu" href="{{ path('app_user_index') }}">UTILISATEURS</a>
                 </li>
@@ -48,24 +51,28 @@
 
               <div class="col-3"></div>
 
-              <ul class="navbar-nav ml-auto col-3 ul-btn-connexion">
+              <ul class="navbar-nav ml-auto col-2 ul-btn-connexion">
                 <li class="nav-item li-btn-connexion">
                   <a class="nav-link nav-link-connexion" href="{{ path('app_logout') }}">DECONNEXION</a>
                 </li>
               </ul>
             </div>
+          </div>
         </nav>
     
     {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
         {% if  (is_granted('ROLE_STRUCTURE') and ('ROLE_PARTENAIRE') ) %}
         <nav class="navbar navbar-expand-lg navbar-bg mb-5">
+          <div class="container-fluid">
             <a class="navbar-brand space-brand" href="{{ path('app_home') }}">
               <img class="logo" src="{{ asset('images/logo.png') }}" alt="Logo">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+              <span class="navbar-toggler-icon">
+                <i class="fas fa-bars"></i>
+              </span>
             </button>
-            <div class="collapse navbar-collapse container" id="navbarNavDropdown">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <ul class="navbar-nav mr-auto menu col-6">
                 <li class="nav-item-menu">
                   <a class="nav-link nav-link-menu disabled" href="{{ path('app_user_index') }}">UTILISATEURS</a>
@@ -89,6 +96,7 @@
                 </li>
               </ul>
             </div>
+          </div>
         </nav>
         {% endif %}
         {% else %}

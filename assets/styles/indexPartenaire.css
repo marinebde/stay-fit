@@ -95,6 +95,14 @@
     color: #dfe0e0;
 }
 
+.statut-actif {
+    background-color: green;
+}
+
+.statut-inactif {
+    background-color: red;
+}
+
 .titre-partenaire-index-h2 {
     color: #0C1120;
     margin-bottom: 1em;
@@ -122,4 +130,16 @@
     font-size: 18px;
     margin-bottom: 0.5em;
 
+}
+
+/* Tablette Responsive */
+
+@media screen and (max-width: 992px) {
+    .checkbox {
+       display: flex;
+    }
+
+    .checkbox>label {
+        padding-left: 0.3em;
+    }
 }
