@@ -4,8 +4,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('../assets/styles/editModule.css') }}" rel="stylesheet">
-    <link href="{{ asset('../assets/styles/newModule.css') }}" rel="stylesheet">
+    {{ encore_entry_link_tags('editModule') }}
+    {{ encore_entry_link_tags('newModule') }}
 {% endblock %}
 
 {% block body %}

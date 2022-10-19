@@ -4,12 +4,12 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('../assets/styles/indexStructure.css') }}" rel="stylesheet">
+    {{ encore_entry_link_tags('indexStructure') }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('indexStructure') }}
+    {{ encore_entry_script_tags('indexStructurejs') }}
 {% endblock %}
 
 {% block body %}

@@ -4,8 +4,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('../assets/styles/newPartenaire.css') }}" rel="stylesheet">
-    <link href="{{ asset('../assets/styles/editPartenaire.css') }}" rel="stylesheet">
+    {{ encore_entry_link_tags('newPartenaire') }}
+    {{ encore_entry_link_tags('editPartenaire') }}
 {% endblock %}
 
 {% block body %}

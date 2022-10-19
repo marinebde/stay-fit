@@ -4,8 +4,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('../assets/styles/editUser.css') }}" rel="stylesheet">
-    <link href="{{ asset('../assets/styles/newUser.css') }}" rel="stylesheet">
+    {{ encore_entry_link_tags('editUser') }}
+    {{ encore_entry_link_tags('newUser') }}
 {% endblock %}
 
 {% block body %}
