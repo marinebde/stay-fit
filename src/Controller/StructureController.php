@@ -18,7 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\Mailer;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 
 
 
@@ -96,6 +95,8 @@ class StructureController extends AbstractController
             foreach($UserPartenaire as $user){
                 $email = $user->getEmail();
                 $user = $user->getPrenom();
+                $this->mailer= $mailer;
+                $this->mailer->sendPartenaire($email, $user);
             }
 
             //récupère les modules associés au partenaire
@@ -114,9 +115,6 @@ class StructureController extends AbstractController
               $this->entityManager->flush();
 
            }
-
-           $this->mailer= $mailer;
-           $this->mailer->sendPartenaire($email, $user);
             
            return $this->redirectToRoute('app_structure_index', [], Response::HTTP_SEE_OTHER);
         }
