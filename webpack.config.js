@@ -42,6 +42,7 @@ Encore
     .addStyleEntry('showPartenaire', './assets/styles/showPartenaire.css')
     .addStyleEntry('showStructure', './assets/styles/showStructure.css')
     .addStyleEntry('showUser', './assets/styles/showUser.css')
+    .addStyleEntry('styleBase', './assets/styles/app.css')
 
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
