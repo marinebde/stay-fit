@@ -3,12 +3,10 @@
 {% block title %}Edit Partenaire{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    {{ encore_entry_link_tags('editPartenaire') }}
 {% endblock %}
 
 {% block body %}
-<div class="body-partenaire-edit">
+<div>
     <a class="btn-retour-edit-partenaire" href="{{ path('app_partenaire_index') }}">Retour</a>
 
     <h1 class="titre-partenaire-edit text-center">Modifier Partenaire</h1>
