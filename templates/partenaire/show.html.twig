@@ -1,144 +1,216 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Partenaire{% endblock %}
+{% block title %}Détails Partenaire{% endblock %}
+{% block meta_description %}Page de visualisation des détails concernant un partenaire ainsi que des structures et modules rattachés à celui-ci{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
-     {{ parent() }}
-     {{ encore_entry_script_tags('showPartenaire') }}
+    {{ parent() }}
+    {{ encore_entry_script_tags('showPartenaire') }}
 {% endblock %}
 
 {% block body %}
 <div>
-      <a class="btn-retour-show-partenaire" href="{{ path('app_partenaire_index') }}">Retour</a>
-      <div class="text-center mb-5">
+    <a class="btn-retour-show-partenaire" href="{{ path('app_partenaire_index') }}">Retour</a>
+    <div class="text-center mb-5">
         <h1 class="titre-partenaire-show">{{ partenaire.nom }}</h1>
+
+        {# Ajout personnalisé du statut partenaire #}
         {% if (partenaire.statut == true) %}
-          <span class="statut-partenaire-show statut-actif">{{ partenaire.statut ? 'Actif' : 'Inactif' }}</span>
+            <span class="statut-partenaire-show statut-actif">{{ partenaire.statut ? 'Actif' : 'Inactif' }}</span>
         {% elseif (partenaire.statut == false) %}
-          <span class="statut-partenaire-show statut-inactif">{{ partenaire.statut ? 'Actif' : 'Inactif' }}</span>
+            <span class="statut-partenaire-show statut-inactif">{{ partenaire.statut ? 'Actif' : 'Inactif' }}</span>
         {% endif %}
-      </div>
-      <div class="global-button-edit-partenaire">
-        <a class="button-edit-partenaire" href="{{ path('app_partenaire_edit', {'id': partenaire.id}) }}">Modifier partenaire</a>
+    </div>
+
+    <div class="global-button-edit-partenaire">
+        {# Aucune modification possible si partenaire inactif #}
+        <a 
+        class="button-edit-partenaire" 
+        {% if partenaire.statut == true %}
+            href="{{ path('app_partenaire_edit', {'id': partenaire.id}) }}"
+        {% endif %}
+        {% if partenaire.statut == false %}
+            data-toggle="modal"
+            data-target="#editModal"
+        {% endif %}
+        >
+          Modifier partenaire
+        </a>
+        
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modification d'un partenaire</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Le partenaire est Inactif.</br>
+                        Pour effectuer une modification vous devez le réactiver.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <a class="button-edit-partenaire new-structure-show-partenaire" href="{{ path('app_structure_new') }}">Nouvelle structure</a>
-      </div>
+    </div>
 
     <section>
         <div class="text-center">
-          <h2 class="titre-partenaire-show-h2">Liste des structures</h2>
-          <table id="formCheck" class="table table-hover container">
-            <thead class="thead-light thead-show-partenaire">
-                <tr>
-                    <th class="th-show-partenaire">ID</th>
-                    <th class="th-show-partenaire">NOM</th>
-                    <th class="th-show-partenaire">STATUT</th>
-                    <th class="th-show-partenaire">ACTIONS</th>
-                </tr>
-            </thead>
-            <tbody class="tr-show-partenaire">
+            <h2 class="titre-partenaire-show-h2">Liste des structures</h2>
+            <table id="formCheck" class="table table-hover container">
+                <thead class="thead-light thead-show-partenaire">
+                    <tr>
+                        <th class="th-show-partenaire">ID</th>
+                        <th class="th-show-partenaire">NOM</th>
+                        <th class="th-show-partenaire">STATUT</th>
+                        <th class="th-show-partenaire">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody class="tr-show-partenaire">
 
                 {% for structures in partenaire.structures %}
-                <tr>
-                    <td>{{ structures.id }}</td>
-                    <td>{{ structures.nom }}</td>
-                    <td>
-                      <div class="form-check form-switch form-switch-statut-partenaire">
-                        <input 
-                        class="form-check-input"
-                        type="checkbox"
-                        id="{{ structures.id }}"
-                        name="{{ structures.nom }}"
-                        value="{{ structures.id }}"
-                        data-path = "{{ path('app_structure_edit_statut', {id: structures.id }) }}"
-                        {{ structures.statut ? "checked" : "" }}
-                        {% if partenaire.statut == false %}
-                        disabled
-                        {% endif %}
-                        data-toggle="modal"
-                        data-target="#exampleModal"
-                        >
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modification statut</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <p>Êtes-vous sûre de vouloir modifier le statut?</p>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                                <button type="button" class="btn btn-primary">Oui</button>
-                              </div>
+                    <tr>
+                        <td>{{ structures.id }}</td>
+                        <td>{{ structures.nom }}</td>
+                        <td>
+                            {# Modification dynamique du statut structure #}
+                            <div class="form-check form-switch form-switch-statut-partenaire">
+                                <input 
+                                class="form-check-input"
+                                type="checkbox"
+                                id="{{ structures.id }}"
+                                name="{{ structures.nom }}"
+                                value="{{ structures.id }}"
+                                data-path = "{{ path('app_structure_edit_statut', {id: structures.id }) }}"
+                                {{ structures.statut ? "checked" : "" }}
+                                {% if partenaire.statut == false %}
+                                    disabled
+                                {% endif %}
+                                data-toggle="modal"
+                                data-target="#exampleModal"
+                                >
+
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Modification statut</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Êtes-vous sûre de vouloir modifier le statut?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                                <button type="button" class="btn btn-primary">Oui</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="td-actions-show-partenaire">
-                        <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structures.id}) }}"></a>
-                        <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_structure_edit', {'id': structures.id}) }}"></a>
-                    </td>
-                </tr>
+                        </td>
+                        <td class="td-actions-show-partenaire">
+                            <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structures.id}) }}"></a>
+
+                            {# Aucune modification possible si partenaire ou structure inactif #}
+                            <a 
+                            class="fa fa-thin fa-pen-to-square btn btn-light" 
+                            {% if partenaire.statut == true and structures.statut == true %}
+                                href="{{ path('app_structure_edit', {'id': structures.id}) }}"
+                            {% endif %}
+                            {% if partenaire.statut == false or structures.statut == false %}
+                                data-toggle="modal"
+                                data-target="#editModalPartenaire"
+                            {% endif %}
+                            >
+                            </a>
+
+                            <div class="modal fade" id="editModalPartenaire" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Modification d'une structure</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>La structure ou le partenaire est inactif.</br>
+                                            Pour effectuer une modification vous devez le(s) réactiver.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </tbody>
-          </table>
+                </tbody>
+            </table>
         </div>
     </section>
     
     <aside class="aside-partenaire-show" id="formCheckModule">
-      <h2 class="titre-partenaire-show-h2 text-center">Modules partenaire par défauts</h2>
+        <h2 class="titre-partenaire-show-h2 text-center">Modules partenaire par défauts</h2>
         {{ form_start(form, {'attr': {'id': 'form-partenaire', 'class' : 'form-partenaire-show' }}) }}
         {% for module in form.modules %}
-        <div class="form-check form-switch form-check-partenaire-show"> 
-          <input 
-              class="form-check-input"
-              type="checkbox"
-              id="{{ module.vars.value }}"
-              name="{{ module.vars.full_name }}"
-              value="{{ module.vars.id }}"
-              data-id ="{{ module.vars.value }}"
-              data-path = "{{ path('app_partenaire_edit_module', {id: partenaire.id }) }}"
-              {{ module.vars.checked? "checked" : "" }}
-              data-toggle="modal"
-              data-target="#exampleModal"
-          >
 
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modification module</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <p>Êtes-vous sûre de vouloir activer/désactier ce module?</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                <button type="button" class="btn btn-primary">Oui</button>
-              </div>
+            {# Modification dynamique des modules partenaire par défaut #}
+            <div class="form-check form-switch form-check-partenaire-show"> 
+                <input 
+                class="form-check-input"
+                type="checkbox"
+                id="{{ module.vars.value }}"
+                name="{{ module.vars.full_name }}"
+                value="{{ module.vars.id }}"
+                data-id ="{{ module.vars.value }}"
+                data-path = "{{ path('app_partenaire_edit_module', {id: partenaire.id }) }}"
+                {{ module.vars.checked? "checked" : "" }}
+                {% if partenaire.statut == false %}
+                    disabled
+                {% endif %}
+                data-toggle="modal"
+                data-target="#exampleModal"
+                >
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modification module</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Êtes-vous sûre de vouloir activer/désactier ce module?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                                <button type="button" class="btn btn-primary">Oui</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="form-check-label form-check-partenaire-show-label" for="{{ module.vars.id }}">
+                    {{ module.vars.label }}
+                </label>  
             </div>
-          </div>
-        </div>
-
-        <label class="form-check-label form-check-partenaire-show-label" for="{{ module.vars.id }}">
-          {{ module.vars.label }}
-        </label>  
-        </div>
         {% endfor %}
         {{ form_end(form, {render_rest: false}) }}
     </aside>
-  </div>
+</div>
 {% endblock %}
 
 

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Structure{% endblock %}
+{% block title %}Détails Structure{% endblock %}
+{% block meta_description %}Page de visualisation des détails concernant une structure ainsi que des modules rattachés à celle-ci{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -13,6 +14,7 @@
 
 {% block body %}
 
+    {# VUE SEULEMENT DU ROLE ADMIN #}
     {% if is_granted('ROLE_ADMIN') %}
         <a class="btn-retour-show-structure" href="{{ path('app_structure_index') }}">Retour</a>
     {% elseif  is_granted('ROLE_PARTENAIRE') %}
@@ -22,9 +24,41 @@
     
     <h1 class="titre-structure-show text-center">{{ structure.nom }}</h1>
 
+    {# VUE SEULEMENT DU ROLE ADMIN #}
     {% if  is_granted('ROLE_ADMIN') %}
     <div class="global-button-edit-structure">
-        <a class="button-edit-structure" href="{{ path('app_structure_edit', {'id': structure.id}) }}">Modifier</a>
+
+        {# Aucune modification possible si structure ou partenaire lié inactif #}
+        <a 
+        class="button-edit-structure"
+        {% if structure.statut == true or structure.partenaire.statut == true %} 
+            href="{{ path('app_structure_edit', {'id': structure.id}) }}"
+        {% endif %}
+        {% if structure.statut == false or structure.partenaire.statut == false %}
+            data-toggle="modal"
+            data-target="#editModalStructureButton"
+        {% endif %}
+        >
+            Modifier
+        </a>
+        <div class="modal fade" id="editModalStructureButton" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modification d'une structure</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>La structure ou le partenaire associé est inactif.
+                        </br>
+                        Pour effectuer une modification vous devez le(s) réactiver.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     {% endif %}
 
@@ -62,75 +96,80 @@
     </table>
     {% if is_granted('ROLE_ADMIN') %}
     <aside class="aside-structure-show" id="formCheckModule">
-     <h2 class="titre-structure-show-h2 text-center">Modules structure</h2>
+        <h2 class="titre-structure-show-h2 text-center">Modules structure</h2>
 
-     <div class="form-check form-switch form-check-structure-show">
-        {% for module in structure.modules %}
-        <input 
-                class="form-check-input"
-                type="checkbox"
-                id="{{ module.id }}"
-                name="{{ module.module.nom }}"
-                value="{{ module.isActive }}"
-                {% if module.isActive == true %}
+        {# Modification dynamique des modules structure #}
+        <div class="form-check form-switch form-check-structure-show">
+            {% for module in structure.modules %}
+            {% if module.module.statut == true %}
+            <input 
+            class="form-check-input"
+            type="checkbox"
+            id="{{ module.id }}"
+            name="{{ module.module.nom }}"
+            value="{{ module.isActive }}"
+            {% if module.isActive == true %}
                 checked
-                {% endif %}
-                data-id ="{{ module.id }}"
-                data-path = "{{ path('app_structure_edit_module', {id: structure.id }) }}"
-                data-toggle="modal"
-                data-target="#exampleModal"
-        >
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modification module</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Êtes-vous sûre de vouloir activer/désactier ce module?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-                        <button type="button" class="btn btn-primary">Oui</button>
+            {% endif %}
+            {% if structure.partenaire.statut == false or structure.statut == false %}
+                disabled
+            {% endif %}
+            data-id ="{{ module.id }}"
+            data-path = "{{ path('app_structure_edit_module', {id: structure.id }) }}"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            >
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modification module</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Êtes-vous sûre de vouloir activer/désactier ce module?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                            <button type="button" class="btn btn-primary">Oui</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <label class="form-check-label form-check-partenaire-show-label" for="{{ module.id }}">
+                {{ module.module.nom }}
+            </label>  
+            {% endif %}
+            {% endfor %}
         </div>
-        <label class="form-check-label form-check-partenaire-show-label" for="{{ module.id }}">
-            {{ module.module.nom }}
-        </label>  
-    
-    {% endfor %}
-
-    </div>
     </aside>
 
-    {% elseif is_granted('ROLE_STRUCTURE') %}
+    {% elseif is_granted('ROLE_PARTENAIRE') %}
     <aside>
-    <h2 class="titre-structure-show-h2 text-center">Modules structure</h2>
+        <h2 class="titre-structure-show-h2 text-center">Modules structure</h2>
 
-     <div id="formCheckModule" class="form-check form-switch form-check-structure-show">
-        {% for module in structure.modules %}
+        <div id="formCheckModule" class="form-check form-switch form-check-structure-show">
+            {% for module in structure.modules %}
+            {% if module.module.statut == true %}
             <input 
-                    class="form-check-input"
-                    type="checkbox"
-                    id="{{ module.id }}"
-                    name="{{ module.module.nom }}"
-                    value="{{ module.isActive }}"
-                    {% if module.isActive == true %}
-                    checked
-                    {% endif %}
-                    disabled
+            class="form-check-input"
+            type="checkbox"
+            id="{{ module.id }}"
+            name="{{ module.module.nom }}"
+            value="{{ module.isActive }}"
+            {% if module.isActive == true %}
+                checked
+            {% endif %}
+            disabled
             >
             <label class="form-check-label form-check-partenaire-show-label" for="{{ module.id }}">
                 {{ module.module.nom }}
             </label> 
-        {% endfor %}
-    </div>
+            {% endif %}
+            {% endfor %}
+        </div>
     </aside>
-{% endif %}
-
+    {% endif %}
 {% endblock %}

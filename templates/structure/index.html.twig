@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Structure index{% endblock %}
+{% block title %}Structure{% endblock %}
+{% block meta_description %}Liste des structures StayFit{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -12,6 +13,8 @@
 {% endblock %}
 
 {% block body %}
+
+{# VUE DU ROLE ADMIN #}
 {% if  is_granted('ROLE_ADMIN') %}
 
     <h1 class="text-center mb-5 titre-structure-index">Liste des structures</h1>
@@ -22,14 +25,14 @@
 
     
    <div class="row row-filters">
-   <div class="col">
-   <form id="form_recherche"  method="POST" class="search-structure">
-        <input type="search" name="recherche[]" id="search" placeholder="recherche">
-   </form>
-   </div>
+        <div class="col">
+            <form id="form_recherche"  method="POST" class="search-structure">
+                <input type="search" name="recherche[]" id="search" placeholder="recherche">
+            </form>
+        </div>
 
-    <div class="filtre-structure col row">
-        <h5 class="titre-filtre-statut col">STATUT</h5>
+        <div class="filtre-structure col row">
+            <h5 class="titre-filtre-statut col">STATUT</h5>
 
             <form id="filters" class="col">
                 <div class="checkbox">
@@ -42,67 +45,69 @@
                     <label for="inactif">Inactif</label>
                 </div>
             </form>
-    </div>
-    <div class="col"></div>
+        </div>
+        <div class="col"></div>
     </div>
    
-      <div id="formCheck">
-     {% include 'structure/structureList.html.twig' %}
-     </div>   
+    <div id="formCheck">
+        {% include 'structure/structureList.html.twig' %}
+    </div>   
 
-    {% elseif is_granted('ROLE_STRUCTURE') %}
+{# VUE DU ROLE STRUCTURE #}
+{% elseif is_granted('ROLE_STRUCTURE') %}
 
-        <div class="text-center mb-5">
-            <h1 class="text-center mb-5 titre-structure-index">Structure {{ app.user.structures.nom }}</h1>
-            {% if (app.user.structures.statut == true) %}
-                <span class="statut-structure-index statut-actif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
-            {% elseif (app.user.structures.statut == false) %}
-                <span class="statut-structure-index statut-inactif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
-            {% endif %}
-        </div>
+    <div class="text-center mb-5">
+        <h1 class="text-center mb-5 titre-structure-index">Structure {{ app.user.structures.nom }}</h1>
+
+        {# Ajout personnalisé du statut de la structure #}
+        {% if (app.user.structures.statut == true) %}
+            <span class="statut-structure-index statut-actif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
+        {% elseif (app.user.structures.statut == false) %}
+            <span class="statut-structure-index statut-inactif">{{ app.user.structures.statut ? 'Actif' : 'Inactif' }}</span>
+        {% endif %}
+    </div>
         
-        <div class="container-structure-info">
-            <div class="info-structure-index row">
-                <span class="titre-info-structure-index col">Adresse :</span>
-                <span class="value-info-structure-index col">{{ app.user.structures.adresse }}</span>
-            </div>
-
-            <div class="info-structure-index row">
-                <span class="titre-info-structure-index col">Code Postal : </span>
-                <span class="value-info-structure-index col">{{ app.user.structures.codePostal }}</span>
-            </div>
-
-            <div class="info-structure-index row">
-                <span class="titre-info-structure-index col">Ville :</span>
-                <span class="value-info-structure-index col">{{ app.user.structures.ville }}</span>
-            </div>
-
-            <div class="info-structure-index row">
-                <span class="titre-info-structure-index col">Gérant :</span>
-                <span class="value-info-structure-index col">{{ app.user.structures.nomGerant }}</span>
-            </div>
-       
+    <div class="container-structure-info">
+        <div class="info-structure-index row">
+            <span class="titre-info-structure-index col">Adresse :</span>
+            <span class="value-info-structure-index col">{{ app.user.structures.adresse }}</span>
         </div>
 
+        <div class="info-structure-index row">
+            <span class="titre-info-structure-index col">Code Postal : </span>
+            <span class="value-info-structure-index col">{{ app.user.structures.codePostal }}</span>
+        </div>
 
-        <h2 class="text-center">Liste des modules</h1>
-            <table class="table table-hover container">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Statut</th>
-                    </tr>
-                </thead>
-            <tbody>
+        <div class="info-structure-index row">
+            <span class="titre-info-structure-index col">Ville :</span>
+            <span class="value-info-structure-index col">{{ app.user.structures.ville }}</span>
+        </div>
 
-                {% for module in app.user.structures.modules %}
+        <div class="info-structure-index row">
+            <span class="titre-info-structure-index col">Gérant :</span>
+            <span class="value-info-structure-index col">{{ app.user.structures.nomGerant }}</span>
+        </div> 
+    </div>
+
+
+    <h2 class="text-center">Liste des modules</h1>
+        <table class="table table-hover container">
+            <thead>
                 <tr>
-                    <td>{{ module.module.nom }}</td>
-                    <td>{{ module.isActive ? 'Actif' : 'Inactif' }}</td>
+                    <th>Nom</th>
+                    <th>Statut</th>
                 </tr>
+            </thead>
+            <tbody>
+                {% for module in app.user.structures.modules %}
+                {% if module.module.statut == true %}
+                    <tr>
+                        <td>{{ module.module.nom }}</td>
+                        <td>{{ module.isActive ? 'Actif' : 'Inactif' }}</td>
+                    </tr>
+                {% endif %}
                 {% endfor %}
             </tbody>
-            </table>
-
-    {% endif %}
+        </table>
+{% endif %}
 {% endblock %}

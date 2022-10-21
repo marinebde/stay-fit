@@ -1,4 +1,5 @@
 {% block title %}Nouveau mot de passe{% endblock %}
+{% block meta_description %}Demande de réinitialisation du mot de passe pour sécuriser et activer le compte utilisateur{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('assets/styles/newMotDePasse.css') }}" rel="stylesheet"/>
@@ -8,14 +9,14 @@
 <h1 class="titre-new-mot-de-passe">Renouvellement du mot de passe</h1>
 {{form_start(form, {'attr' : {'class' : 'form-new-motdepasse'}})}}
 
-<div class="form-container-new-motdepasse">
-	{{form_row(form.plainPassword.first)}}
-	{{form_row(form.plainPassword.second)}}
-</div>
+	<div class="form-container-new-motdepasse">
+		{{form_row(form.plainPassword.first)}}
+		{{form_row(form.plainPassword.second)}}
+	</div>
 
-<div class="container-btn-save-motdepasse">
-	<button class="btn-save-motdepasse btn"  type="submit">Envoyer</button>
-</div>
+	<div class="container-btn-save-motdepasse">
+		<button class="btn-save-motdepasse btn"  type="submit">Envoyer</button>
+	</div>
 
 {{form_end(form)}}
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Module{% endblock %}
+{% block title %}Détails Module{% endblock %}
+{% block meta_description %}Page de visualisation des détails concernant un module{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -14,7 +15,6 @@
     <div class="global-button-edit-module mb-5">
       <a class="button-edit-module" href="{{ path('app_module_edit', {'id': module.id}) }}">Modifier</a>
     </div>
-
 
     <table class="table table-hover container">
         <tbody class="tr-show-module">

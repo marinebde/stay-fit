@@ -68,31 +68,39 @@ class RegistrationController extends AbstractController
 
     #[Route('/confirmer-mon-compte/{token}', name: 'app_user_confirmer_compte', methods: ['GET', 'POST'])]
     public function confirmAccount(string $token, EntityManagerInterface $entityManager, User $user, Request $request, UserPasswordHasherInterface $userPasswordHasher) {
-      
+        
+        //On vérifie si le token est égal au token de l'user et qu'il n'est pas nul
         if ($user->getToken() === null || $token !== $user->getToken())
         {
             throw new Exception(('Utilisateur inconnu'));
         }
+
          $form = $this->createForm(MotdepasseType::class, $user);
          $form->handleRequest($request);
 
             if($form->isSubmitted() && $form->isValid())
             {
+                //On modifie le mot de passe
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
                         $form->get('plainPassword')->getData()
                     )
                 );
+
+                //On supprime le token
                 $user->setToken(null);
+
+                //On active l'utilisateur
                 $user->setStatut(true);
+
+                //On met à jour la date de connexion
                 $user->setDateConnexion(new DateTime());
 
                 $entityManager->persist($user);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_login');
             }
-           // $user = $this->userRepository->findOneBy(["token" => $token]);
            
 
         return $this->render('registration/newmotdepasse.html.twig', [
@@ -155,6 +163,7 @@ class RegistrationController extends AbstractController
 public function editStatut(Request $request, User $user): Response
 {   
         $statut = $request->request->get('statut');
+        
         // transforme la chaine de caractère en boolean
         $booleanStatut = filter_var($statut, FILTER_VALIDATE_BOOLEAN);
 

@@ -49,6 +49,8 @@ class StructureController extends AbstractController
 
         // On vérifie si on a une requête Ajax
         if($request->get("ajax")) {
+
+            //On vérifie si un des champs statut ou search sont présents
             if($statut or $search) {
             return new JsonResponse([
                 'content' => $this->renderView('structure/structureList.html.twig', [
@@ -88,28 +90,30 @@ class StructureController extends AbstractController
             $this->entityManager->flush();
 
 
-            //récupère l'id du partenaire associé à la structure
+            //On récupère l'id du partenaire associé à la structure
             $partenaireId = $structure->getPartenaire()->getId();
             $UserPartenaire = $UserRepository->getPartenaire($partenaireId);
-
+            
+            //On boucle sur les utilisateurs liés à ce partenaire
             foreach($UserPartenaire as $user){
+
+                //On récupère le mail, le prénom et on envoi un mail à l'utilisateur
                 $email = $user->getEmail();
                 $user = $user->getPrenom();
                 $this->mailer= $mailer;
                 $this->mailer->sendPartenaire($email, $user);
             }
 
-            //récupère les modules associés au partenaire
+            //On récupère les modules associés au partenaire
             $modules = $moduleRepository->findByPartenaire($partenaireId);
 
-            ////boucle sur les modules
+            //On boucle sur les modules
             foreach ($modules as $module) {
               // Création d'un structure_module
               $structureModule = new StructureModules();
               $structureModule->setIsActive(true);
               $structureModule->setModule($module);
               $structureModule->setStructure(($structure));
-
 
               $this->entityManager->persist($structureModule);
               $this->entityManager->flush();
@@ -167,14 +171,19 @@ class StructureController extends AbstractController
 #[Route('/{id}/edit-module', name: 'app_structure_edit_module', methods: ['GET','POST'])]
 public function editModule(Request $request, StructureModulesRepository $structureModulesRepository, Structure $structure): Response
 {   
+    //On récupère l'état de la checkbox
     $valueCheckbox = $request->request->get('etat');
+
+    //On récupère l'id du module
     $idStructureModule = $request->request->get('id');
 
+    //On récupère l'objet Module en question
     $module = $structureModulesRepository->find($idStructureModule);
     
 
     if  ($valueCheckbox == "true") {
         
+        //Update du module structure
         $module->setIsActive(true);
         $this->entityManager->persist($structure);
         $this->entityManager->flush();

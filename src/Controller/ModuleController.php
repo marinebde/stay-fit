@@ -87,6 +87,7 @@ class ModuleController extends AbstractController
 public function editModule(Request $request, Module $module,): Response
 {   
     $statut = $request->request->get('statut');
+    
     // transforme la chaine de caractère en boolean
     $booleanStatut = filter_var($statut, FILTER_VALIDATE_BOOLEAN);
 

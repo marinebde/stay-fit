@@ -17,7 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 
 
 #[Route('/partenaire')]
@@ -48,6 +47,8 @@ class PartenaireController extends AbstractController
     
         // On vérifie si on a une requête Ajax
         if($request->get('ajax')) {
+
+            //On vérifie si un des champs statut ou search sont présents
             if($statut or $search) {
                 return new JsonResponse([
                     'content' => $this->renderView('partenaire/partenaireList.html.twig', [
@@ -56,12 +57,13 @@ class PartenaireController extends AbstractController
                 ]);
             } else {
 
-            return new JsonResponse([
-                'content' => $this->renderView('partenaire/partenaireList.html.twig', [
-                    'partenaires' => $partenaireRepository->findAll(),
-                ])
-            ]);  
-        }}
+                return new JsonResponse([
+                    'content' => $this->renderView('partenaire/partenaireList.html.twig', [
+                        'partenaires' => $partenaireRepository->findAll(),
+                    ])
+                ]);  
+            }
+        }
         
         return $this->render('partenaire/index.html.twig', [
             'partenaires' => $partenaireRepository->findAll(),
@@ -73,16 +75,17 @@ class PartenaireController extends AbstractController
 * @IsGranted("ROLE_ADMIN")
 */
     #[Route('/new', name: 'app_partenaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PartenaireRepository $partenaireRepository, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, PartenaireRepository $partenaireRepository, ModuleRepository $moduleRepository): Response
     {
         $partenaire = new Partenaire();
-
+    
         $form = $this->createForm(PartenaireType::class, $partenaire);
         $form->handleRequest($request);
-        
+ 
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            //Si aucun module coché -> message d'erreur
             if ($partenaire->getModules()->isEmpty()) {
                 $this->addFlash(
                     'notice',
@@ -127,14 +130,21 @@ class PartenaireController extends AbstractController
 #[Route('/{id}/edit-module', name: 'app_partenaire_edit_module', methods: ['GET','POST'])]
 public function editModule(Request $request, Partenaire $partenaire, ModuleRepository $module, StructureRepository $structureRepository, StructureModulesRepository $structureModuleRepository): Response
 {   
-  
+    //On récupère l'état de la checkbox
     $valueCheckbox = $request->request->get('etat');
+
+    //On récupère l'id du module
     $idModule = $request->request->get('id');
+
+    //On récupère l'objet Module en question 
     $module = $module->find($idModule);
+
+    //On récupère les structures rattachées au partenaire
     $partenaireId = $partenaire->getId();
     $structurePartenaire = $structureRepository->findByPartenaire($partenaireId);
 
     if  ($valueCheckbox == "true") {
+
         //Ajout du partenaireModule
         $partenaire->addModule($module);
 
@@ -179,24 +189,17 @@ public function editModule(Request $request, Partenaire $partenaire, ModuleRepos
 * @IsGranted("ROLE_ADMIN")
 */
 #[Route('/{id}/edit-statut', name: 'app_partenaire_edit_statut', methods: ['GET','POST'])]
-public function editStatut(Request $request, Partenaire $partenaire, StructureRepository $structureRepository): Response
+public function editStatut(Request $request, Partenaire $partenaire): Response
 {   
         $statut = $request->request->get('statut');
+        
         // transforme la chaine de caractère en boolean
         $booleanStatut = filter_var($statut, FILTER_VALIDATE_BOOLEAN);
-        $partenaireId = $partenaire->getId();
-        $structures = $structureRepository->findByPartenaire($partenaireId);
        
             //Désactivation du partenaire
             $partenaire->setStatut($booleanStatut);
             $this->entityManager->persist($partenaire);
             $this->entityManager->flush();
-
-             //Désactivation structure liées
-            foreach ($structures as $structure) {
-            $structure->setStatut(false);
-            $this->entityManager->flush();
-            }
 
             return new JsonResponse();
 }
@@ -220,7 +223,7 @@ public function editStatut(Request $request, Partenaire $partenaire, StructureRe
            // Liste des structures relié au partenaire
            $structurePartenaire = $structureRepository->findByPartenaire($partenaireId);
     
-            // Alerte en cas de 0 modules cochés
+            //Si aucun module coché -> message d'erreur
             if ($partenaireModule->isEmpty()) {
                 $this->addFlash(
                     'notice',
@@ -234,16 +237,15 @@ public function editStatut(Request $request, Partenaire $partenaire, StructureRe
                 $this->entityManager->persist($partenaire);
                 $this->entityManager->flush();
 
-                 // Désactivation des structures    
-                 foreach ($structurePartenaire as $structure) {
-                    $structure->setStatut(false);
-                    $this->entityManager->flush();
-
+                //On boucle sur les structure du partenaire   
+                foreach ($structurePartenaire as $structure) {
+                    
                     $structureId = $structure->getId();
 
-                     //Récupération des StructureModules de la structure
-                     $structureModuleListe = $structureModuleRepository->findStructureModule($structureId);
+                    //Récupération des StructureModules de la structure
+                    $structureModuleListe = $structureModuleRepository->findStructureModule($structureId);
 
+                    //On boucle sur les structure_modules
                     foreach ($structureModuleListe as $liste) {
                         
                         //Suppression des StructureModule pour cette structure

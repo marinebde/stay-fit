@@ -1,19 +1,20 @@
 
 <table class="table table-hover container text-center mt-3">
-            <thead class="thead-light thead-index-structure">
-                <tr>
-                    <th class="th-index-structure">ID</th>
-                    <th class="th-index-structure">NOM</th>
-                    <th class="th-index-structure">STATUT</th>
-                    <th class="th-index-structure">ACTIONS</th>
-                </tr>
-            </thead>
-            <tbody class="tr-index-structure">
-            {% for structure in structures %}
-                <tr>
-                    <td>{{ structure.id }}</td>
-                    <td>{{ structure.nom }}</td>
-                    <td>
+    <thead class="thead-light thead-index-structure">
+        <tr>
+            <th class="th-index-structure">ID</th>
+            <th class="th-index-structure">NOM</th>
+            <th class="th-index-structure">STATUT</th>
+            <th class="th-index-structure">ACTIONS</th>
+        </tr>
+    </thead>
+    <tbody class="tr-index-structure">
+        {% for structure in structures %}
+            <tr>
+                <td>{{ structure.id }}</td>
+                <td>{{ structure.nom }}</td>
+                <td>
+                    {# Champ de statut dynamique avec ouverture modal (actif/inactif) #}
                     <div class="form-check form-switch form-switch-statut-partenaire">
                         <input 
                         class="form-check-input"
@@ -24,7 +25,7 @@
                         data-path = "{{ path('app_structure_edit_statut', {id: structure.id }) }}"
                         {{ structure.statut ? "checked" : "" }}
                         {% if structure.partenaire.statut == false %}
-                        disabled
+                            disabled
                         {% endif %}
                         data-toggle="modal"
                         data-target="#exampleModal"
@@ -52,7 +53,37 @@
                 </td>
                 <td class="td-actions-index-structure">
                     <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structure.id}) }}"></a>
-                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_structure_edit', {'id': structure.id}) }}"></a>
+
+                    {# Aucune modification possible si structure ou partenaire lié inactif #}
+                    <a 
+                    class="fa fa-thin fa-pen-to-square btn btn-light" 
+                    {% if structure.partenaire.statut == true and structure.statut == true %}
+                        href="{{ path('app_structure_edit', {'id': structure.id}) }}"
+                    {% endif %}
+                    {% if structure.partenaire.statut == false or structure.statut == false %}
+                        data-toggle="modal"
+                        data-target="#editModalStructure"
+                    {% endif %}
+                    >
+                    </a>
+                    <div class="modal fade" id="editModalStructure" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modification d'une structure</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>La structure ou le partenaire rattaché à cette structure est inactif.
+                                    </br>
+                                    Pour effectuer une modification vous devez le(s) réactiver.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
         {% else %}
@@ -60,5 +91,5 @@
                 <td colspan="8">pas de résultat trouvé</td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
+    </tbody>
+</table>

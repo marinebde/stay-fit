@@ -1,19 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Login!{% endblock %}
+{% block title %}Page de connexion{% endblock %}
+{% block meta_description %}Connecter vous via cette page au Back Office de l'enseigne Stay Fit{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <style>
-    html, body {
+    html, body 
+    {
     background-color: #2c4d90;
-}
+    }
     </style>
 {% endblock %}
 
 
 {% block body %}
-        <form class="form-signin" method="post">
+    <form class="form-signin" method="post">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
@@ -23,11 +25,13 @@
 
         <label for="inputEmail" class="sr-only">Email</label>
         <input type="email" name="email" value="{{ last_username }}" id="inputEmail" class="form-control email" placeholder="Email" required autofocus>
+
         <label for="inputPassword" class="sr-only">Mot de passe</label>
         <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required>
+
         <button class="btn btn-lg btn-primary btn-block btn-connexion" type="submit">
             Connexion
         </button>
-        </form>
+    </form>
 {% endblock %}
 
