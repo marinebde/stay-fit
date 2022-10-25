@@ -66,7 +66,6 @@ Puis exécuter la création de la base de donnée avec la commande : php bin/con
 
 - 5 Compiler le css/js : npm run build
 
-- 6 Vous pouvez maintenant accéder à votre portfolio en vous connectant au serveur : npm run watch
 
 ## Login
 
