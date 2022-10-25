@@ -24,9 +24,6 @@
                         value="{{ structure.statut }}"
                         data-path = "{{ path('app_structure_edit_statut', {id: structure.id }) }}"
                         {{ structure.statut ? "checked" : "" }}
-                        {% if structure.partenaire.statut == false %}
-                            disabled
-                        {% endif %}
                         data-toggle="modal"
                         data-target="#exampleModal"
                         >
@@ -54,36 +51,8 @@
                 <td class="td-actions-index-structure">
                     <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structure.id}) }}"></a>
 
-                    {# Aucune modification possible si structure ou partenaire lié inactif #}
-                    <a 
-                    class="fa fa-thin fa-pen-to-square btn btn-light" 
-                    {% if structure.partenaire.statut == true and structure.statut == true %}
-                        href="{{ path('app_structure_edit', {'id': structure.id}) }}"
-                    {% endif %}
-                    {% if structure.partenaire.statut == false or structure.statut == false %}
-                        data-toggle="modal"
-                        data-target="#editModalStructure"
-                    {% endif %}
-                    >
-                    </a>
-                    <div class="modal fade" id="editModalStructure" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modification d'une structure</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>La structure ou le partenaire rattaché à cette structure est inactif.
-                                    </br>
-                                    Pour effectuer une modification vous devez le(s) réactiver.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_structure_edit', {'id': structure.id}) }}"></a>
+                    
                 </td>
             </tr>
         {% else %}

@@ -61,21 +61,13 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
         $user = $this->security->getUser();
 
-            //On vérifie si l'utilisateur est actif
-            if($user->isStatut() == false){
+        //On met à jour la date de connexion
+        $user->setDateConnexion(new DateTime());
 
-            return new RedirectResponse($this->urlGenerator->generate('app_login'));
-
-            }
+        $entityManager->persist($user);
+        $entityManager->flush();
             
-            //On met à jour la date de connexion
-            $user->setDateConnexion(new DateTime());
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-            
-
-            return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
 
     }
 

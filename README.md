@@ -21,6 +21,7 @@ Les documents Annexes sont disponibles dans le dossier ``annexes`` :
 - Charte graphique
 - Manuel d'utilisation
 - Documentation technique
+- Les Wireframes
 
 ## Badges
 ![FIGMA](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)

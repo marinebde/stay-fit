@@ -28,46 +28,15 @@
     {% if  is_granted('ROLE_ADMIN') %}
     <div class="global-button-edit-structure">
 
-        {# Aucune modification possible si structure ou partenaire lié inactif #}
-        <a 
-        class="button-edit-structure"
-        {% if structure.statut == true or structure.partenaire.statut == true %} 
-            href="{{ path('app_structure_edit', {'id': structure.id}) }}"
-        {% endif %}
-        {% if structure.statut == false or structure.partenaire.statut == false %}
-            data-toggle="modal"
-            data-target="#editModalStructureButton"
-        {% endif %}
-        >
+        <a class="button-edit-structure" href="{{ path('app_structure_edit', {'id': structure.id}) }}">
             Modifier
         </a>
-        <div class="modal fade" id="editModalStructureButton" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modification d'une structure</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>La structure ou le partenaire associé est inactif.
-                        </br>
-                        Pour effectuer une modification vous devez le(s) réactiver.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
     {% endif %}
 
     <table class="table table-hover container mb-5">
         <tbody class="tr-show-structure">
-            <tr>
-                <th class="th-show-structure">Id</th>
-                <td>{{ structure.id }}</td>
-            </tr>
             <tr>
                 <th class="th-show-structure">Nom</th>
                 <td>{{ structure.nom }}</td>
@@ -110,9 +79,6 @@
             value="{{ module.isActive }}"
             {% if module.isActive == true %}
                 checked
-            {% endif %}
-            {% if structure.partenaire.statut == false or structure.statut == false %}
-                disabled
             {% endif %}
             data-id ="{{ module.id }}"
             data-path = "{{ path('app_structure_edit_module', {id: structure.id }) }}"

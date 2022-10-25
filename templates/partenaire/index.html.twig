@@ -32,7 +32,7 @@
 
     
         <div class="filtre-partenaire col row">
-            <h5 class="titre-filtre-statut col">STATUT</h5>
+            <p class="titre-filtre-statut col">STATUT</p>
             <form id="filters" class="col">
                 <div class="checkbox">
                     <input type="checkbox" name="statut[]" value="1" id="actif">
@@ -67,7 +67,7 @@
     </div>
 
     <div class="text-center">
-        <h2 class="titre-partenaire-index-h2">Liste des structures</h2>
+        <p class="titre-partenaire-index-h2">Liste des structures</p>
             
             <div id="formCheck" class="col">
                 {% include 'partenaire/structureList.html.twig' %}
@@ -78,7 +78,9 @@
 
         <ul class="container modules-defaut-index-partenaire">
             {% for module in app.user.partenaires.modules %}
-                <li class="modules-defaut-index-partenaire-liste">{{ module.nom }}</li>
+                {% if module.statut == true %}
+                    <li class="modules-defaut-index-partenaire-liste">{{ module.nom }}</li>
+                {% endif %}
             {% endfor %}
         </ul>
 {% endif %}

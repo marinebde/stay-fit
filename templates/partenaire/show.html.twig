@@ -27,39 +27,14 @@
     </div>
 
     <div class="global-button-edit-partenaire">
-        {# Aucune modification possible si partenaire inactif #}
-        <a 
-        class="button-edit-partenaire" 
-        {% if partenaire.statut == true %}
-            href="{{ path('app_partenaire_edit', {'id': partenaire.id}) }}"
-        {% endif %}
-        {% if partenaire.statut == false %}
-            data-toggle="modal"
-            data-target="#editModal"
-        {% endif %}
-        >
-          Modifier partenaire
+    
+        <a class="button-edit-partenaire" href="{{ path('app_partenaire_edit', {'id': partenaire.id}) }}">
+            Modifier partenaire
         </a>
-        
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modification d'un partenaire</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Le partenaire est Inactif.</br>
-                        Pour effectuer une modification vous devez le réactiver.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <a class="button-edit-partenaire new-structure-show-partenaire" href="{{ path('app_structure_new') }}">Nouvelle structure</a>
+        <a class="button-edit-partenaire new-structure-show-partenaire" href="{{ path('app_structure_new') }}">
+            Nouvelle structure
+        </a>
     </div>
 
     <section>
@@ -91,9 +66,6 @@
                                 value="{{ structures.id }}"
                                 data-path = "{{ path('app_structure_edit_statut', {id: structures.id }) }}"
                                 {{ structures.statut ? "checked" : "" }}
-                                {% if partenaire.statut == false %}
-                                    disabled
-                                {% endif %}
                                 data-toggle="modal"
                                 data-target="#exampleModal"
                                 >
@@ -122,36 +94,7 @@
                         <td class="td-actions-show-partenaire">
                             <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structures.id}) }}"></a>
 
-                            {# Aucune modification possible si partenaire ou structure inactif #}
-                            <a 
-                            class="fa fa-thin fa-pen-to-square btn btn-light" 
-                            {% if partenaire.statut == true and structures.statut == true %}
-                                href="{{ path('app_structure_edit', {'id': structures.id}) }}"
-                            {% endif %}
-                            {% if partenaire.statut == false or structures.statut == false %}
-                                data-toggle="modal"
-                                data-target="#editModalPartenaire"
-                            {% endif %}
-                            >
-                            </a>
-
-                            <div class="modal fade" id="editModalPartenaire" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Modification d'une structure</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>La structure ou le partenaire est inactif.</br>
-                                            Pour effectuer une modification vous devez le(s) réactiver.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_structure_edit', {'id': structures.id}) }}"></a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -162,6 +105,10 @@
     
     <aside class="aside-partenaire-show" id="formCheckModule">
         <h2 class="titre-partenaire-show-h2 text-center">Modules partenaire par défauts</h2>
+
+        {# Affichage des modules du partenaire seulement si le statut du module est actif #}
+        {# Requête effectuée à l'affichage du formulaire #}
+
         {{ form_start(form, {'attr': {'id': 'form-partenaire', 'class' : 'form-partenaire-show' }}) }}
         {% for module in form.modules %}
 
@@ -176,9 +123,6 @@
                 data-id ="{{ module.vars.value }}"
                 data-path = "{{ path('app_partenaire_edit_module', {id: partenaire.id }) }}"
                 {{ module.vars.checked? "checked" : "" }}
-                {% if partenaire.statut == false %}
-                    disabled
-                {% endif %}
                 data-toggle="modal"
                 data-target="#exampleModal"
                 >
