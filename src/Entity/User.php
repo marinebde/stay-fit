@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé')]
@@ -19,12 +20,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Vous devez saisir un prénom")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Vous devez saisir un nom")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\Email(message: "Cet email n'est pas valide")]
+    #[Assert\NotBlank(message: "Vous devez saisir une adresse email")]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -34,6 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotCompromisedPassword]
     private ?string $password = null;
 
     #[ORM\Column]
@@ -43,9 +49,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $date_connexion = null;
 
     #[ORM\ManyToOne(inversedBy: 'users', targetEntity: Partenaire::class)]
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
     private ?Partenaire $partenaires = null;
 
     #[ORM\ManyToOne(inversedBy: 'users', targetEntity: Structure::class)]
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
     private ?Structure $structures = null;
 
     #[ORM\Column(length: 255, nullable: true)]

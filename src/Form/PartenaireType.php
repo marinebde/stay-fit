@@ -8,7 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Module;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 
 class PartenaireType extends AbstractType
@@ -16,7 +18,14 @@ class PartenaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
+            ->add('nom', TextType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez un nom',
+                    ])
+                ],
+            ])
             ->add('statut')
             ->add('modules', EntityType::class, [
                 'class' => Module::class,

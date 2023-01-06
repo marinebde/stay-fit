@@ -24,7 +24,7 @@
     </div>
 
    <div class="row row-filters">
-        <div class="col">
+        <div class="col search">
             <form id="form_recherche"  method="POST" class="search-partenaire">
                 <input type="search" name="recherche[]" id="search" placeholder="recherche">
             </form>
@@ -45,10 +45,9 @@
                 </div>
             </form>
         </div>
-        <div class="col"></div>
     </div>
 
-    <div id="formCheck">
+    <div id="formCheck" class="table-responsive">
         {% include 'partenaire/partenaireList.html.twig' %}
     </div>
 

@@ -1,5 +1,5 @@
 
-{{ form_start(registrationForm, {'attr' : {'class' : 'form-save-utilisateur'}}) }}
+{{ form_start(registrationForm, {'attr' : {'class' : 'form-save-utilisateur', novalidate: 'novalidate'}}) }}
 
     <div class="form-container-row-utilisateur-save">
         {{ form_row(registrationForm.nom) }}
@@ -17,6 +17,7 @@
 
     <div class="form-container-row-utilisateur-save-autres">
         {{ form_row(registrationForm.roles) }}
+      
         {{ form_row(registrationForm.partenaires) }}
         {{ form_row(registrationForm.structures) }}
      </div>

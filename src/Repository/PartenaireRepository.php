@@ -3,10 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Partenaire;
-use ContainerUODnshT\get_ServiceLocator_JlyTfzMService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @extends ServiceEntityRepository<Partenaire>

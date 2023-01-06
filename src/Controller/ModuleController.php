@@ -84,7 +84,7 @@ class ModuleController extends AbstractController
 * @IsGranted("ROLE_ADMIN")
 */
 #[Route('/{id}/edit-statut', name: 'app_module_edit_statut', methods: ['GET','POST'])]
-public function editModule(Request $request, Module $module,): Response
+public function editStatut(Request $request, Module $module,): Response
 {   
     $statut = $request->request->get('statut');
     

@@ -40,7 +40,8 @@ class Structure
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'structures')]
     private Collection $users;
 
-    #[ORM\ManyToOne(targetEntity: Partenaire::class, inversedBy: 'structures', cascade : ['persist'] )]
+    #[ORM\ManyToOne(targetEntity: Partenaire::class, inversedBy: 'structures')]
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
     private ?Partenaire $partenaire = null;
 
     #[ORM\OneToMany(mappedBy: 'structure', targetEntity: StructureModules::class)]

@@ -1,13 +1,12 @@
 window.onload = () => {
     // Filtrage de la barre de recherche
-    const FilterSearch = document.querySelector("#form_recherche");
 
     //On récupère l'input
      const Input = document.querySelector("#form_recherche input");
 
         Input.addEventListener("keyup", () => {
 
-            //On fabrique la "queryString à chaque caracère tapé"
+            //On fabrique la "queryString à chaque caractère tapé"
             const ParamsSearch = new URLSearchParams();
             ParamsSearch.append('recherche', Input.value);
 
@@ -94,7 +93,7 @@ window.onload = () => {
     });
 }; 
 
-// Activation ou désactivation dynamique d'un partenaire
+// Activation ou désactivation dynamique d'une Structure
 
 $('#formCheck').on("change","input[type=checkbox]", function(){
  
@@ -113,9 +112,9 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
             type:     'POST',
             url:       url,  
             data:  { statut : val },
-            success: function(reponse){
+            success: function(response){
                // $('#magasinDatas').html(data);
-               console.log(reponse);
+               console.log(response);
             }
         })
         .then(function (response) {
@@ -148,3 +147,41 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
     }
     })
 });
+
+
+// Activation ou désactivation dynamique d'un partenaire
+
+//checkbox = document.querySelector(".form-check-input");
+//
+////On boucle sur les input
+//document.querySelectorAll(".form-check-input").forEach(input => {
+//    input.addEventListener("change", () => {
+//
+//        const idPartenaire = input.dataset.id;
+//
+//        const Modal = document.getElementById('exampleModal')
+//        const Footer = Modal.getElementsByClassName('modal-footer')[0].children[1]
+//
+//        Footer.addEventListener("click", () => {
+//            
+//            //On lance la requête ajax
+//            fetch(`http://localhost:8888/ecf-2022/public/partenaire/${idPartenaire}/edit-statut`)
+//            .then((response) => {
+//                console.log(response);
+//                return response.json()
+//            }).then(data => {
+//                console.log(data.content);
+//                if(checkbox.checked) {
+//                    checkbox.value = "1";
+//                    checkbox.id = "1";
+//                } else {
+//                    checkbox.value = "";
+//                    checkbox.id = "";
+//                }
+//                
+//                $("[data-dismiss=modal]").trigger({ type: "click" });
+//    
+//            }).catch((err) => console.log('Erreur : '+ err));     
+//         })
+//    });
+//});

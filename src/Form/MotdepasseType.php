@@ -33,7 +33,7 @@ class MotdepasseType extends AbstractType
                         'message' => 'Please enter a password',
                     ]),
                     new Length([
-                        'min' => 6,
+                        'min' => 8,
                         'minMessage' => 'Votre mot de passe doit comporté {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,

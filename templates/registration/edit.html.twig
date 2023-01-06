@@ -12,8 +12,8 @@
    <a class="btn-retour-edit-utilisateur" href="{{ path('app_user_index') }}">Retour</a>
 
    <h1 class="titre-utilisateur-edit text-center">Modifier Utilisateur</h1>
+   {{ include('registration/_delete_form.html.twig') }}
 
    {{ include('registration/register.html.twig', {'button_label': 'Enregistrer'}) }}
-
 
 {% endblock %}

@@ -170,7 +170,7 @@ public function editModule(Request $request, Partenaire $partenaire, ModuleRepos
            
             $structureId = $structure->getId();
 
-            //Récupération des StructureModules de la structure
+            //Récupération et suppression des StructureModules de la structure
             $structureModuleListe = $structureModuleRepository->findByStructureModule($structureId, $idModule);
             
             foreach ($structureModuleListe as $liste) {
@@ -183,25 +183,32 @@ public function editModule(Request $request, Partenaire $partenaire, ModuleRepos
             $this->entityManager->flush();
 
         return new JsonResponse();
-    }}
+    }
+}
+
 
 /**
 * @IsGranted("ROLE_ADMIN")
 */
 #[Route('/{id}/edit-statut', name: 'app_partenaire_edit_statut', methods: ['GET','POST'])]
-public function editStatut(Request $request, Partenaire $partenaire): Response
+public function editStatut(Request $request, Partenaire $partenaire, PartenaireRepository $partenaireRepository): Response
 {   
-        $statut = $request->request->get('statut');
-        
-        // transforme la chaine de caractère en boolean
-        $booleanStatut = filter_var($statut, FILTER_VALIDATE_BOOLEAN);
-       
-            //Désactivation du partenaire
-            $partenaire->setStatut($booleanStatut);
+        $partenaireId = $request->get('id');
+        $int_partenaireId = intval( $partenaireId );
+        $partenaire = $partenaireRepository->findOneBy(['id' => $int_partenaireId]);
+
+         $statut = $partenaire->isStatut();
+            //Modification statut partenaire
+            $partenaire->setStatut(!$statut);
             $this->entityManager->persist($partenaire);
             $this->entityManager->flush();
 
-            return new JsonResponse();
+        
+        return new JsonResponse([
+            'content' => $this->renderView('partenaire/partenaireList.html.twig', [
+            'partenaires' => $partenaireRepository->findAll(),
+            ])
+        ]);
 }
 
 

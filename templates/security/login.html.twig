@@ -7,9 +7,7 @@
     {{ parent() }}
     <style>
     html, body 
-    {
-    background-color: #2c4d90;
-    }
+    {background-color: #2c4d90;}
     </style>
 {% endblock %}
 
@@ -36,6 +34,14 @@
         <button class="btn btn-lg btn-primary btn-block btn-connexion" type="submit">
             Connexion
         </button>
+
+        <label class="remember-me">
+            <input type="checkbox" name="_remember_me" checked class="form-check-input input-remember-me"/>
+            Se souvenir de moi
+        </label>
+
+        <a class="btn mot-de-passe" href="{{ path('app_forgot_password_request') }}">Mot de passe oublié</a>
+
     </form>
 {% endblock %}
 

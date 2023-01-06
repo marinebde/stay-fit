@@ -14,12 +14,12 @@
 {% block body %}
     <h1 class="text-center mb-5 titre-utilisateur-index">Liste des utilisateurs</h1>
 
-    <div class="text-center mb-5">
+    <div class="text-center div-new-utilisateur">
         <a class="btn-center btn-new-utilisateur" href="{{ path('app_register') }}">Nouvel utilisateur</a>
     </div>
 
-    <div class="text-center pt-3">
-        <table class="table table-hover container" id="formCheck">
+    <div class="text-center pt-3 table-responsive">
+        <table class="table table-hover container mt-3" id="formCheck">
             <thead class="thead-light thead-index-utilisateur">
                 <tr>
                     <th class="th-index-utilisateur">ID</th>

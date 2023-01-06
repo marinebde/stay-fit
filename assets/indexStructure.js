@@ -36,6 +36,7 @@ window.onload = () => {
                 }
             }).then( response => response.json()
             ).then(data => {
+                console.log(data);
                 history.pushState({}, null, URLSearch.pathname + "?" + ParamsSearch.toString());
                 const content = document.querySelector('#formCheck');
                 content.innerHTML = data.content;
@@ -72,6 +73,7 @@ window.onload = () => {
                 }
             }).then(response => response.json()
                 ).then(data => {
+                    console.log(data);
                     history.pushState({}, null, Url.pathname + "?" + Params.toString());
                     const content = document.querySelector('#formCheck');
                     
@@ -95,6 +97,37 @@ window.onload = () => {
     });
 };
 
+// Activation ou désactivation dynamique d'une structure
+
+//On boucle sur les input
+// document.querySelectorAll(".form-switch-statut-partenaire input").forEach(input => {
+//     input.addEventListener("change", () => {
+// 
+//         //On récupère l'url de la route edit-statut
+//         const Url = input.dataset.path;
+// 
+//         const Modal = document.getElementById('exampleModal')
+//         const Footer = Modal.getElementsByClassName('modal-footer')[0].children[1]
+// 
+//         Footer.addEventListener("click", () => {
+//             
+//             //On lance la requête ajax
+//             fetch(Url)
+//             .then((response) => {
+//                 console.log(response);
+//                 return response.json()
+//             }).then(data => {
+//                 console.log(data)
+//                 const input = document.querySelector('.form-check-input')
+//                 input.innerHTML = data.input;
+//                 
+//                 $("[data-dismiss=modal]").trigger({ type: "click" });
+//                 
+//             }).catch((err) => console.log('Erreur : '+ err));     
+//          })
+//     });
+// });
+
 // Activation ou désactivation dynamique d'une Structure
 
 $('#formCheck').on("change","input[type=checkbox]", function(){
@@ -114,9 +147,9 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
             type:     'POST',
             url:       url,  
             data:  { statut : val },
-            success: function(reponse){
+            success: function(response){
                // $('#magasinDatas').html(data);
-               console.log(reponse);
+               console.log(response);
             }
         })
         .then(function (response) {
@@ -149,4 +182,3 @@ $('#formCheck').on("change","input[type=checkbox]", function(){
     }
     })
 });
-

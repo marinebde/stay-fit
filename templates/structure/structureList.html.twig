@@ -1,3 +1,4 @@
+<div class="number-of-structure">Nombre de structure: {{ structures|length }}</div>
 
 <table class="table table-hover container text-center mt-3">
     <thead class="thead-light thead-index-structure">
@@ -49,9 +50,9 @@
                     </div>
                 </td>
                 <td class="td-actions-index-structure">
-                    <a class="fa fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structure.id}) }}"></a>
+                    <a class="fa fa-1x fa-thin fa-eye btn btn-light" href="{{ path('app_structure_show', {'id': structure.id}) }}"></a>
 
-                    <a class="fa fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_structure_edit', {'id': structure.id}) }}"></a>
+                    <a class="fa fa-1x fa-thin fa-pen-to-square btn btn-light" href="{{ path('app_structure_edit', {'id': structure.id}) }}"></a>
                     
                 </td>
             </tr>

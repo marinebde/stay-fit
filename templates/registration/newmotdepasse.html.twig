@@ -1,10 +1,14 @@
 {% block stylesheets %}
-    <link href="{{ asset('assets/styles/newMotDePasse.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('assets/styles/newmotdepasse.css') }}" rel="stylesheet"/>
 {% endblock %}
  
 {% block body %}
 <h1 class="titre-new-mot-de-passe">Renouvellement du mot de passe</h1>
 {{form_start(form, {'attr' : {'class' : 'form-new-motdepasse'}})}}
+
+	{% if csrf_token('authenticate') %}
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+    {% endif %}
 
 	<div class="form-container-new-motdepasse">
 		{{form_row(form.plainPassword.first)}}

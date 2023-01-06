@@ -14,7 +14,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents; 
 
 class RegistrationFormType extends AbstractType
 {
@@ -29,9 +33,10 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
-            ->add('prenom')
-            ->add('email')
+            ->add('nom', TextType::class)
+            ->add('prenom', TextType::class)
+            ->add('email', EmailType::class, [
+            ])
             ->add('statut')
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
@@ -45,8 +50,6 @@ class RegistrationFormType extends AbstractType
                     new Length([
                         'min' => 8,
                         'minMessage' => 'Votre mot de passe doit comporté au minimum {{ limit }} caractères',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
                     ]),
                 ],
             ])
@@ -62,10 +65,10 @@ class RegistrationFormType extends AbstractType
                 ]
                 ])
             ->add('partenaires', EntityType::class, [
-                        'class' => Partenaire::class,
-                        'choice_label' => 'nom',
-                        'placeholder' =>'',
-                        'required' => false,
+                'class' => Partenaire::class,
+                'choice_label' => 'nom',
+                'placeholder' =>'',
+                'required' => false,
                 ])
             ->add('structures', EntityType::class, [
                         'class' => Structure::class,
@@ -74,56 +77,6 @@ class RegistrationFormType extends AbstractType
                         'required' => false,
                 ]);
 
-
-
-       // $builder->get('roles')->addEventListener(
-       //     FormEvents::POST_SUBMIT,
-       //     function (FormEvent $event) {
-       //         // It's important here to fetch $event->getForm()->getData(), as
-       //         // $event->getData() will get you the client data (that is, the ID)
-       //         $form = $event->getForm();
-//
-       //         $user = $this->security->getUser();
-       //         if ($user->getRoles('ROLE_PARTENAIRE')) {
-       //             $this->addPartenaire($form->getParent(), $form->getData());
-       //         }
-//
-       //         // since we've added the listener to the child, we'll have to pass on
-       //         // the parent to the callback function!
-       //     }
-       // );
-
-       //$builder->addEventListener(
-         //  FormEvents::POST_SET_DATA,
-         //  function (FormEvent $event) {
-         //    $data = $event->getData();
-         //    /* @var $ville Ville */
-         //    $user = $data->getRoles();
-         //    $form = $event->getForm();
-         //    if ($user) {
-         //      // On récupère le département et la région
-         //      $user= $user->getRoles();
-         //      // On crée les 2 champs supplémentaires
-         //      $this->addPartenaire($form, $user);
-         //      // On set les données
-         //      $form->get('roles')->setData($user);
-         //    } else {
-         //      // On crée les 2 champs en les laissant vide (champs utilisé pour le JavaScript)
-         //      $this->addPartenaire($form, null);
-         //    }
-         //  }
-        //  );
-
-
-
-            //->add('partenaires', EntityType::class, [
-            //    'class' => Partenaire::class,
-            //    'choice_label' => 'nom',
-            //])
-            //->add('structures', EntityType::class, [
-            //    'class' => Structure::class,
-            //    'choice_label' => 'nom',
-            //]);
 
                 $builder
                     ->get('roles')
@@ -137,33 +90,21 @@ class RegistrationFormType extends AbstractType
                         return explode(', ', $rolesAsString);
                     }
                 ));
+
+                $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                    $user = $event->getData();
+                    $form = $event->getForm();
+                
+                    if ($user->getRoles() == 'Partenaire') {
+                        $form->add('partenaires', EntityType::class, [
+                            'class' => Partenaire::class,
+                            'choice_label' => 'nom',
+                            'placeholder' =>'',
+                            'required' => false,
+                        ]);
+                        };
+                });
     }
-
-//ivate function addPartenaire(FormInterface $form)
-//
-//$builder = $form->getConfig()->getFormFactory()->createNamedBuilder(
-//  'partenaires',
-//  EntityType::class,
-//  null,
-//  [
-//      'class' => Partenaire::class,
-//      'choice_label' => 'nom',
-//      'placeholder' => '',
-//      'mapped' => true,
-//      'required' => false,
-//      'auto_initialize' => false,
-//  ]
-//  );
-//  $builder->addEventListener(
-//      FormEvents::POST_SUBMIT,
-//      function (FormEvent $event) {
-//        $form = $event->getForm();
-//      }
-//    );
-//    $form->add($builder->getForm());
-//  }
-
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {

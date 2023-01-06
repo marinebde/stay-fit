@@ -17,6 +17,7 @@ class StructureModules
     private ?bool $is_active = null;
 
     #[ORM\ManyToOne(inversedBy: 'modules')]
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
     private ?Structure $structure = null;
 
     #[ORM\ManyToOne(inversedBy: 'structure')]
